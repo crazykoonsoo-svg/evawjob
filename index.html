@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Pretendard","Apple SD Gothic Neo",sans-serif;-webkit-font-smoothing:antialiased}
@@ -14,12 +15,21 @@ input,select,button,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script>
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -27,29 +37,99 @@ function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" 
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 var _React = React,
   useState = _React.useState,
   useEffect = _React.useEffect,
   useRef = _React.useRef,
   useMemo = _React.useMemo,
   useCallback = _React.useCallback;
-var COLORS_MAP = {
-  rank1_3: "#16a34a",
-  rank4_10: "#ca8a04",
-  rank11_20: "#ea580c",
-  rank21: "#dc2626",
-  up: "#16a34a",
-  down: "#dc2626",
-  same: "#6b7280"
+var SUPABASE_URL = 'https://itcfiwblvyxpptorporu.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0Y2Zpd2Jsdnl4cHB0b3Jwb3J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTU2OTIsImV4cCI6MjA5NDg5MTY5Mn0.ZB4ph_VjsoSKsvE3iiAfOmD1JIv-ehWmBECtM_OUtvU';
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── Row mapping ──
+var kwToRow = function kwToRow(k) {
+  return {
+    id: k.id,
+    province: k.province || '',
+    city: k.city || '',
+    district: k.district || '',
+    dong: k.dong || '',
+    main_keyword: k.mainKeyword || '',
+    sub_keyword: k.subKeyword || '',
+    assignee: k.assignee || '',
+    status: k.status || '미작성',
+    article_url: k.articleUrl || '',
+    created_at: k.createdAt || '',
+    updated_at: k.updatedAt || ''
+  };
 };
+var kwFromRow = function kwFromRow(r) {
+  return {
+    id: r.id,
+    province: r.province || '',
+    city: r.city || '',
+    district: r.district || '',
+    dong: r.dong || '',
+    mainKeyword: r.main_keyword || '',
+    subKeyword: r.sub_keyword || '',
+    assignee: r.assignee || '',
+    status: r.status || '미작성',
+    articleUrl: r.article_url || '',
+    createdAt: r.created_at || '',
+    updatedAt: r.updated_at || '',
+    exposureScore: 0,
+    currentRank: 0,
+    prevRank: 0,
+    ctr: 0,
+    clicks: 0,
+    impressions: 0,
+    lastChecked: '',
+    history: []
+  };
+};
+var assToRow = function assToRow(a) {
+  return {
+    id: a.id,
+    name: a.name || '',
+    affiliation: a.affiliation || ''
+  };
+};
+var assFromRow = function assFromRow(r) {
+  return {
+    id: r.id,
+    name: r.name || '',
+    affiliation: r.affiliation || ''
+  };
+};
+var dbToRow = function dbToRow(r) {
+  return {
+    id: r.id,
+    name: r.name || '',
+    phone: r.phone || '',
+    purpose: r.purpose || '',
+    region: r.region || '',
+    assignee: r.assignee || '',
+    created_at: r.createdAt || ''
+  };
+};
+var dbFromRow = function dbFromRow(r) {
+  return {
+    id: r.id,
+    name: r.name || '',
+    phone: r.phone || '',
+    purpose: r.purpose || '',
+    region: r.region || '',
+    assignee: r.assignee || '',
+    createdAt: r.created_at || ''
+  };
+};
+
+// ── Constants ──
 var REGION_DATA = {
   "서울특별시": {
     type: "special",
@@ -151,178 +231,10 @@ var STATUSES = [{
   color: "#d97706",
   bg: "#fef3c7"
 }];
-var EXPOSURE_STATUS = [{
-  value: "노출",
-  color: "#16a34a",
-  bg: "#dcfce7"
-}, {
-  value: "미노출",
-  color: "#dc2626",
-  bg: "#fee2e2"
-}];
-var SAMPLE = [{
-  id: "k1",
-  province: "광주광역시",
-  city: "",
-  district: "서구",
-  dong: "상무동",
-  mainKeyword: "광주애견미용학원",
-  assignee: "a1",
-  status: "작성완료",
-  createdAt: "2025-01-10",
-  updatedAt: "2025-01-15",
-  exposureScore: 92,
-  currentRank: 3,
-  prevRank: 7,
-  ctr: 8.4,
-  clicks: 320,
-  impressions: 3810,
-  articleUrl: "https://blog.naver.com/example1",
-  lastChecked: "2025-01-20",
-  history: [7, 6, 5, 4, 4, 3, 3]
-}, {
-  id: "k2",
-  province: "광주광역시",
-  city: "",
-  district: "북구",
-  dong: "용봉동",
-  mainKeyword: "광주북구애견미용",
-  assignee: "a2",
-  status: "미작성",
-  createdAt: "2025-01-12",
-  updatedAt: "2025-01-18",
-  exposureScore: 71,
-  currentRank: 6,
-  prevRank: 4,
-  ctr: 5.1,
-  clicks: 180,
-  impressions: 3529,
-  articleUrl: "",
-  lastChecked: "2025-01-19",
-  history: [3, 4, 4, 5, 5, 6, 6]
-}, {
-  id: "k3",
-  province: "서울특별시",
-  city: "",
-  district: "강남구",
-  dong: "역삼동",
-  mainKeyword: "강남애견미용학원",
-  assignee: "a3",
-  status: "작성완료",
-  createdAt: "2025-01-05",
-  updatedAt: "2025-01-17",
-  exposureScore: 97,
-  currentRank: 1,
-  prevRank: 2,
-  ctr: 12.3,
-  clicks: 890,
-  impressions: 7236,
-  articleUrl: "https://blog.naver.com/example3",
-  lastChecked: "2025-01-21",
-  history: [4, 3, 2, 2, 2, 1, 1]
-}, {
-  id: "k4",
-  province: "서울특별시",
-  city: "",
-  district: "마포구",
-  dong: "합정동",
-  mainKeyword: "합정동애견미용",
-  assignee: "a1",
-  status: "대기",
-  createdAt: "2025-01-14",
-  updatedAt: "2025-01-20",
-  exposureScore: 58,
-  currentRank: 12,
-  prevRank: 9,
-  ctr: 3.8,
-  clicks: 95,
-  impressions: 2500,
-  articleUrl: "",
-  lastChecked: "2025-01-18",
-  history: [7, 8, 8, 9, 10, 11, 12]
-}, {
-  id: "k5",
-  province: "경상남도",
-  city: "창원시",
-  district: "성산구",
-  dong: "중앙동",
-  mainKeyword: "창원애견미용학원",
-  assignee: "a4",
-  status: "미작성",
-  createdAt: "2025-01-16",
-  updatedAt: "2025-01-16",
-  exposureScore: 32,
-  currentRank: 25,
-  prevRank: 25,
-  ctr: 1.2,
-  clicks: 18,
-  impressions: 1500,
-  articleUrl: "",
-  lastChecked: "2025-01-16",
-  history: [25, 25, 26, 25, 25, 24, 25]
-}, {
-  id: "k6",
-  province: "경상북도",
-  city: "포항시",
-  district: "북구",
-  dong: "죽도동",
-  mainKeyword: "포항애견미용학원",
-  assignee: "a5",
-  status: "작성완료",
-  createdAt: "2025-01-08",
-  updatedAt: "2025-01-19",
-  exposureScore: 85,
-  currentRank: 4,
-  prevRank: 6,
-  ctr: 7.2,
-  clicks: 410,
-  impressions: 5694,
-  articleUrl: "https://blog.naver.com/example6",
-  lastChecked: "2025-01-20",
-  history: [9, 8, 7, 6, 5, 5, 4]
-}, {
-  id: "k7",
-  province: "광주광역시",
-  city: "",
-  district: "광산구",
-  dong: "수완동",
-  mainKeyword: "수완지구애견미용",
-  assignee: "a2",
-  status: "대기",
-  createdAt: "2025-01-03",
-  updatedAt: "2025-01-10",
-  exposureScore: 45,
-  currentRank: 18,
-  prevRank: 15,
-  ctr: 2.4,
-  clicks: 48,
-  impressions: 2000,
-  articleUrl: "",
-  lastChecked: "2025-01-10",
-  history: [12, 13, 14, 15, 15, 17, 18]
-}, {
-  id: "k8",
-  province: "경기도",
-  city: "수원시",
-  district: "영통구",
-  dong: "망포동",
-  mainKeyword: "수원애견미용학원",
-  assignee: "a3",
-  status: "미작성",
-  createdAt: "2025-01-13",
-  updatedAt: "2025-01-21",
-  exposureScore: 67,
-  currentRank: 8,
-  prevRank: 11,
-  ctr: 5.9,
-  clicks: 230,
-  impressions: 3898,
-  articleUrl: "https://blog.naver.com/example8",
-  lastChecked: "2025-01-21",
-  history: [14, 13, 12, 11, 10, 9, 8]
-}];
-var getRankColor = function getRankColor(r) {
-  return !r ? "#9ca3af" : r <= 3 ? COLORS_MAP.rank1_3 : r <= 10 ? COLORS_MAP.rank4_10 : r <= 20 ? COLORS_MAP.rank11_20 : COLORS_MAP.rank21;
+var COLORS_MAP = {
+  up: "#16a34a",
+  down: "#dc2626",
+  same: "#6b7280"
 };
 var getRankChange = function getRankChange(c, p) {
   if (!c || !p) return {
@@ -364,15 +276,15 @@ var getGrade = function getGrade(s) {
     bg: "#fee2e2"
   };
 };
-var getExposureStatus = function getExposureStatus(rank) {
-  return !rank || rank === 0 || rank > 20 ? "미노출" : "노출";
-};
 var parseKeywords = function parseKeywords(txt) {
   return txt.split("\n").map(function (s) {
     return s.trim();
   }).filter(Boolean).filter(function (v, i, a) {
     return a.indexOf(v) === i;
   });
+};
+var getRankColor = function getRankColor(r) {
+  return !r ? "#9ca3af" : r <= 3 ? "#16a34a" : r <= 10 ? "#ca8a04" : r <= 20 ? "#ea580c" : "#dc2626";
 };
 function Badge(_ref) {
   var label = _ref.label,
@@ -425,67 +337,10 @@ function AssigneeBadge(_ref2) {
     }
   }, "(", a.affiliation, ")"));
 }
-function RankCell(_ref3) {
-  var current = _ref3.current,
-    prev = _ref3.prev;
-  var ch = getRankChange(current, prev);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 6
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 14,
-      fontWeight: 700,
-      color: getRankColor(current)
-    }
-  }, current ? "".concat(current, "\uC704") : "-"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 11,
-      fontWeight: 600,
-      color: ch.color
-    }
-  }, ch.symbol));
-}
-function Sparkline(_ref4) {
-  var data = _ref4.data,
-    _ref4$color = _ref4.color,
-    color = _ref4$color === void 0 ? "#64748b" : _ref4$color;
-  if (!data || data.length < 2) return null;
-  var w = 70,
-    h = 26,
-    mn = Math.min.apply(Math, _toConsumableArray(data)),
-    mx = Math.max.apply(Math, _toConsumableArray(data)),
-    rng = mx - mn || 1;
-  var pts = data.map(function (v, i) {
-    return "".concat(i / (data.length - 1) * w, ",").concat(h - (v - mn) / rng * (h - 4) - 2);
-  }).join(" ");
-  var last = pts.split(" ").pop().split(",");
-  return /*#__PURE__*/React.createElement("svg", {
-    width: w,
-    height: h,
-    style: {
-      display: "block"
-    }
-  }, /*#__PURE__*/React.createElement("polyline", {
-    points: pts,
-    fill: "none",
-    stroke: color,
-    strokeWidth: "1.5",
-    strokeLinejoin: "round"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: last[0],
-    cy: last[1],
-    r: "2.5",
-    fill: color
-  }));
-}
-function StatCard(_ref5) {
-  var label = _ref5.label,
-    value = _ref5.value,
-    color = _ref5.color;
+function StatCard(_ref3) {
+  var label = _ref3.label,
+    value = _ref3.value,
+    color = _ref3.color;
   return /*#__PURE__*/React.createElement("div", {
     style: {
       background: "var(--surf)",
@@ -513,16 +368,16 @@ function StatCard(_ref5) {
   }, value));
 }
 
-/* ── 대량 키워드 입력 모달 ── */
-function BulkAddModal(_ref6) {
+/* ── BulkAddModal ── */
+function BulkAddModal(_ref4) {
   var _regionData$province, _regionData$province2;
-  var open = _ref6.open,
-    onClose = _ref6.onClose,
-    onSave = _ref6.onSave,
-    assignees = _ref6.assignees,
-    regionData = _ref6.regionData,
-    defaultProvince = _ref6.defaultProvince,
-    defaultCity = _ref6.defaultCity;
+  var open = _ref4.open,
+    onClose = _ref4.onClose,
+    onSave = _ref4.onSave,
+    assignees = _ref4.assignees,
+    regionData = _ref4.regionData,
+    defaultProvince = _ref4.defaultProvince,
+    defaultCity = _ref4.defaultCity;
   var _useState = useState(defaultProvince || ""),
     _useState2 = _slicedToArray(_useState, 2),
     province = _useState2[0],
@@ -538,7 +393,7 @@ function BulkAddModal(_ref6) {
   var _useState7 = useState([]),
     _useState8 = _slicedToArray(_useState7, 2),
     rows = _useState8[0],
-    setRows = _useState8[1]; // [{id, keyword, assigneeIds:[], status}]
+    setRows = _useState8[1];
   var _useState9 = useState(1),
     _useState0 = _slicedToArray(_useState9, 2),
     step = _useState0[0],
@@ -546,8 +401,7 @@ function BulkAddModal(_ref6) {
   var _useState1 = useState(null),
     _useState10 = _slicedToArray(_useState1, 2),
     activeId = _useState10[0],
-    setActiveId = _useState10[1]; // 현재 선택된 키워드 id
-
+    setActiveId = _useState10[1];
   useEffect(function () {
     if (open) {
       setProvince(defaultProvince || "");
@@ -617,7 +471,8 @@ function BulkAddModal(_ref6) {
     var today = new Date().toISOString().slice(0, 10);
     var newKws = [];
     rows.forEach(function (row) {
-      if (row.assigneeIds.length === 0) {
+      var targets = row.assigneeIds.length > 0 ? row.assigneeIds : [''];
+      targets.forEach(function (aid) {
         newKws.push({
           id: "k" + Date.now() + Math.random(),
           province: province,
@@ -625,7 +480,8 @@ function BulkAddModal(_ref6) {
           district: "",
           dong: "",
           mainKeyword: row.keyword,
-          assignee: "",
+          subKeyword: "",
+          assignee: aid,
           status: row.status,
           createdAt: today,
           updatedAt: today,
@@ -639,31 +495,7 @@ function BulkAddModal(_ref6) {
           articleUrl: "",
           history: []
         });
-      } else {
-        row.assigneeIds.forEach(function (aid) {
-          newKws.push({
-            id: "k" + Date.now() + Math.random(),
-            province: province,
-            city: isProvince ? city : "",
-            district: "",
-            dong: "",
-            mainKeyword: row.keyword,
-            assignee: aid,
-            status: row.status,
-            createdAt: today,
-            updatedAt: today,
-            lastChecked: today,
-            exposureScore: 0,
-            currentRank: 0,
-            prevRank: 0,
-            ctr: 0,
-            clicks: 0,
-            impressions: 0,
-            articleUrl: "",
-            history: []
-          });
-        });
-      }
+      });
     });
     onSave(newKws);
     onClose();
@@ -826,7 +658,7 @@ function BulkAddModal(_ref6) {
     onChange: function onChange(e) {
       return setRawText(e.target.value);
     },
-    placeholder: "광주애견미용학원\n광주강아지미용\n상무지구애견미용\n광주북구애견미용\n...",
+    placeholder: "광주애견미용학원\n광주강아지미용\n상무지구애견미용\n...",
     style: {
       flex: 1,
       minHeight: 340,
@@ -938,9 +770,9 @@ function BulkAddModal(_ref6) {
       flexDirection: "column",
       gap: 6
     }
-  }, rows.map(function (row, i) {
+  }, rows.map(function (row) {
     var isActive = activeId === row.id;
-    var hasAssignees = row.assigneeIds.length > 0;
+    var hasA = row.assigneeIds.length > 0;
     return /*#__PURE__*/React.createElement("div", {
       key: row.id,
       onClick: function onClick() {
@@ -952,10 +784,9 @@ function BulkAddModal(_ref6) {
         gap: 8,
         padding: "9px 12px",
         borderRadius: 8,
-        border: "1px solid " + (isActive ? "#3b82f6" : hasAssignees ? "var(--bdr)" : "#fcd34d"),
-        background: isActive ? "#eff6ff" : hasAssignees ? "var(--surf)" : "#fefce8",
-        cursor: "pointer",
-        transition: "all 0.1s"
+        border: "1px solid " + (isActive ? "#3b82f6" : hasA ? "var(--bdr)" : "#fcd34d"),
+        background: isActive ? "#eff6ff" : hasA ? "var(--surf)" : "#fefce8",
+        cursor: "pointer"
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
@@ -1088,8 +919,7 @@ function BulkAddModal(_ref6) {
         borderRadius: 8,
         border: "1px solid " + (checked ? "#3b82f6" : "var(--bdr)"),
         background: checked ? "#eff6ff" : "var(--surf)",
-        cursor: "pointer",
-        transition: "all 0.1s"
+        cursor: "pointer"
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -1101,8 +931,7 @@ function BulkAddModal(_ref6) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        flexShrink: 0,
-        transition: "all 0.1s"
+        flexShrink: 0
       }
     }, checked && /*#__PURE__*/React.createElement("span", {
       style: {
@@ -1180,12 +1009,7 @@ function BulkAddModal(_ref6) {
     style: {
       fontSize: 12
     }
-  }, "\uB2F4\uB2F9\uC790\uB97C \uBC30\uC815\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      marginTop: 4
-    }
-  }, "\uC911\uBCF5 \uBC30\uC815\uB3C4 \uAC00\uB2A5\uD569\uB2C8\uB2E4")))), step === 2 && /*#__PURE__*/React.createElement("div", {
+  }, "\uB2F4\uB2F9\uC790\uB97C \uBC30\uC815\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4")))), step === 2 && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "14px 24px",
       borderTop: "1px solid var(--bdr)",
@@ -1199,7 +1023,7 @@ function BulkAddModal(_ref6) {
       fontSize: 12,
       color: "var(--mut)"
     }
-  }, province && /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCCD ", province, city ? " · " + city : "", " \xB7 "), "\uCD1D ", /*#__PURE__*/React.createElement("strong", null, rows.length), "\uAC1C \uD0A4\uC6CC\uB4DC"), /*#__PURE__*/React.createElement("div", {
+  }, province && /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCCD ", province, city ? " · " + city : "", " \xB7 "), "\uCD1D ", /*#__PURE__*/React.createElement("strong", null, rows.length), "\uAC1C"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 10
@@ -1232,10 +1056,12 @@ function BulkAddModal(_ref6) {
   }, rows.length, "\uAC1C \uC800\uC7A5")))));
 }
 
-/* ── 담당자 관리 ── */
-function AssigneeManager(_ref7) {
-  var assignees = _ref7.assignees,
-    setAssignees = _ref7.setAssignees;
+/* ── AssigneeManager ── */
+function AssigneeManager(_ref5) {
+  var assignees = _ref5.assignees,
+    onAdd = _ref5.onAdd,
+    onSave = _ref5.onSave,
+    onDelete = _ref5.onDelete;
   var _useState11 = useState({
       name: "",
       affiliation: ""
@@ -1262,35 +1088,20 @@ function AssigneeManager(_ref7) {
   };
   function add() {
     if (!form.name.trim()) return;
-    setAssignees(function (p) {
-      return [].concat(_toConsumableArray(p), [{
-        id: "a_" + Date.now(),
-        name: form.name.trim(),
-        affiliation: form.affiliation.trim()
-      }]);
+    onAdd({
+      id: "a_" + Date.now(),
+      name: form.name.trim(),
+      affiliation: form.affiliation.trim()
     });
     setForm({
       name: "",
       affiliation: ""
     });
   }
-  function remove(id) {
-    if (assignees.length <= 1) {
-      alert("최소 1명 이상 필요합니다.");
-      return;
-    }
-    setAssignees(function (p) {
-      return p.filter(function (a) {
-        return a.id !== id;
-      });
-    });
-  }
   function saveEdit() {
-    setAssignees(function (p) {
-      return p.map(function (a) {
-        return a.id === editId ? _objectSpread(_objectSpread({}, a), editForm) : a;
-      });
-    });
+    onSave(_objectSpread({
+      id: editId
+    }, editForm));
     setEditId(null);
   }
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
@@ -1349,7 +1160,7 @@ function AssigneeManager(_ref7) {
     onKeyDown: function onKeyDown(e) {
       return e.key === "Enter" && add();
     },
-    placeholder: "\uC18C\uC18D \uC9C0\uC5ED (\uC608: \uAD11\uC8FC, \uACBD\uAE30 \uBD81\uBD80)",
+    placeholder: "\uC18C\uC18D \uC9C0\uC5ED",
     style: _objectSpread(_objectSpread({}, inp), {}, {
       flex: 1,
       minWidth: 180
@@ -1507,7 +1318,7 @@ function AssigneeManager(_ref7) {
       }
     }, "\uC218\uC815"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        return remove(a.id);
+        return onDelete(a.id, assignees.length);
       },
       style: {
         padding: "5px 10px",
@@ -1528,14 +1339,15 @@ function AssigneeManager(_ref7) {
   }, "\uB2F4\uB2F9\uC790\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")));
 }
 
-/* ── 지역 관리 ── */
-function RegionManager(_ref8) {
+/* ── RegionManager ── */
+function RegionManager(_ref6) {
   var _regionData$selProv, _regionData$selProv2;
-  var regionData = _ref8.regionData,
-    setRegionData = _ref8.setRegionData,
-    data = _ref8.data,
-    setData = _ref8.setData,
-    assignees = _ref8.assignees;
+  var regionData = _ref6.regionData,
+    onSaveRegionData = _ref6.onSaveRegionData,
+    data = _ref6.data,
+    onUpdateKeyword = _ref6.onUpdateKeyword,
+    onAddKeywords = _ref6.onAddKeywords,
+    assignees = _ref6.assignees;
   var _useState17 = useState(PROVINCE_LIST[0]),
     _useState18 = _slicedToArray(_useState17, 2),
     selProv = _useState18[0],
@@ -1555,8 +1367,7 @@ function RegionManager(_ref8) {
   var _useState25 = useState(null),
     _useState26 = _slicedToArray(_useState25, 2),
     openDropdown = _useState26[0],
-    setOpenDropdown = _useState26[1]; // kwId or null
-
+    setOpenDropdown = _useState26[1];
   useEffect(function () {
     setSelCity("");
     setShowBulk(false);
@@ -1582,51 +1393,42 @@ function RegionManager(_ref8) {
   }, [data, selProv, selCity, isProvince]);
   function addCity() {
     if (!newCity.trim()) return;
-    setRegionData(function (p) {
-      return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, selProv, _objectSpread(_objectSpread({}, p[selProv]), {}, {
-        cities: [].concat(_toConsumableArray(p[selProv].cities), [newCity.trim()])
-      })));
-    });
+    var rd = _objectSpread(_objectSpread({}, regionData), {}, _defineProperty({}, selProv, _objectSpread(_objectSpread({}, regionData[selProv]), {}, {
+      cities: [].concat(_toConsumableArray(regionData[selProv].cities), [newCity.trim()])
+    })));
+    onSaveRegionData(rd);
     setNewCity("");
   }
   function removeCity(city) {
-    setRegionData(function (p) {
-      return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, selProv, _objectSpread(_objectSpread({}, p[selProv]), {}, {
-        cities: p[selProv].cities.filter(function (c) {
-          return c !== city;
-        })
-      })));
-    });
-  }
-  function handleBulkSave(newKws) {
-    setData(function (p) {
-      return [].concat(_toConsumableArray(p), _toConsumableArray(newKws));
-    });
+    var rd = _objectSpread(_objectSpread({}, regionData), {}, _defineProperty({}, selProv, _objectSpread(_objectSpread({}, regionData[selProv]), {}, {
+      cities: regionData[selProv].cities.filter(function (c) {
+        return c !== city;
+      })
+    })));
+    onSaveRegionData(rd);
   }
   function setKwAssignee(kwId, assId) {
-    setData(function (p) {
-      return p.map(function (d) {
-        return d.id === kwId ? _objectSpread(_objectSpread({}, d), {}, {
-          assignee: assId,
-          updatedAt: new Date().toISOString().slice(0, 10)
-        }) : d;
-      });
+    var kw = data.find(function (d) {
+      return d.id === kwId;
     });
+    if (kw) onUpdateKeyword(_objectSpread(_objectSpread({}, kw), {}, {
+      assignee: assId,
+      updatedAt: new Date().toISOString().slice(0, 10)
+    }));
     setOpenDropdown(null);
   }
-  function cycleStatus(kwId, currentStatus) {
+  function cycleStatus(kwId, cur) {
+    var kw = data.find(function (d) {
+      return d.id === kwId;
+    });
+    if (!kw) return;
     var idx = STATUSES.findIndex(function (s) {
-      return s.value === currentStatus;
+      return s.value === cur;
     });
-    var next = STATUSES[(idx + 1) % STATUSES.length].value;
-    setData(function (p) {
-      return p.map(function (d) {
-        return d.id === kwId ? _objectSpread(_objectSpread({}, d), {}, {
-          status: next,
-          updatedAt: new Date().toISOString().slice(0, 10)
-        }) : d;
-      });
-    });
+    onUpdateKeyword(_objectSpread(_objectSpread({}, kw), {}, {
+      status: STATUSES[(idx + 1) % STATUSES.length].value,
+      updatedAt: new Date().toISOString().slice(0, 10)
+    }));
   }
   var STAT_COLORS = {
     미작성: "#6b7280",
@@ -1798,7 +1600,7 @@ function RegionManager(_ref8) {
     onKeyDown: function onKeyDown(e) {
       return e.key === "Enter" && addCity();
     },
-    placeholder: "\uC2DC/\uAD70 \uCD94\uAC00 (\uC608: \uC218\uC6D0\uC2DC, \uAC00\uD3C9\uAD70)",
+    placeholder: "\uC2DC/\uAD70 \uCD94\uAC00",
     style: _objectSpread(_objectSpread({}, inp), {}, {
       flex: 1
     })
@@ -1922,7 +1724,7 @@ function RegionManager(_ref8) {
       style: {
         color: "#92400e"
       }
-    }, "\uB2F4\uB2F9\uC790 \u25BE"), /*#__PURE__*/React.createElement("span", {
+    }, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 9,
         color: "var(--mut)"
@@ -1967,12 +1769,6 @@ function RegionManager(_ref8) {
           alignItems: "center",
           justifyContent: "space-between",
           gap: 8
-        },
-        onMouseEnter: function onMouseEnter(e) {
-          return e.currentTarget.style.background = kw.assignee === a.id ? "#eff6ff" : "var(--hov)";
-        },
-        onMouseLeave: function onMouseLeave(e) {
-          return e.currentTarget.style.background = kw.assignee === a.id ? "#eff6ff" : "transparent";
         }
       }, /*#__PURE__*/React.createElement("span", null, a.name), a.affiliation && /*#__PURE__*/React.createElement("span", {
         style: {
@@ -1996,18 +1792,11 @@ function RegionManager(_ref8) {
         color: "#dc2626",
         borderTop: "1px solid var(--bdr)",
         fontWeight: 600
-      },
-      onMouseEnter: function onMouseEnter(e) {
-        return e.currentTarget.style.background = "#fee2e2";
-      },
-      onMouseLeave: function onMouseLeave(e) {
-        return e.currentTarget.style.background = "transparent";
       }
     }, "\uBC30\uC815 \uD574\uC81C"))), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
         return cycleStatus(kw.id, kw.status);
       },
-      title: "\uD074\uB9AD\uD558\uBA74 \uC0C1\uD0DC\uAC00 \uBCC0\uACBD\uB429\uB2C8\uB2E4",
       style: {
         fontSize: 10,
         padding: "3px 8px",
@@ -2032,7 +1821,7 @@ function RegionManager(_ref8) {
     onClose: function onClose() {
       return setShowBulk(false);
     },
-    onSave: handleBulkSave,
+    onSave: onAddKeywords,
     assignees: assignees,
     regionData: regionData,
     defaultProvince: selProv,
@@ -2040,13 +1829,13 @@ function RegionManager(_ref8) {
   }));
 }
 
-/* ── DB 생산 ── */
-function DbView(_ref9) {
-  var dbRecords = _ref9.dbRecords,
-    setDbRecords = _ref9.setDbRecords,
-    assignees = _ref9.assignees,
-    regionData = _ref9.regionData,
-    dark = _ref9.dark;
+/* ── DbView ── */
+function DbView(_ref7) {
+  var dbRecords = _ref7.dbRecords,
+    onAdd = _ref7.onAdd,
+    onDelete = _ref7.onDelete,
+    assignees = _ref7.assignees,
+    dark = _ref7.dark;
   var BLANK_DB = {
     name: "",
     phone: "",
@@ -2079,23 +1868,14 @@ function DbView(_ref9) {
   var today = new Date().toISOString().slice(0, 10);
   function addRecord() {
     if (!form.name.trim()) return;
-    setDbRecords(function (p) {
-      return [_objectSpread(_objectSpread({
-        id: "db_" + Date.now()
-      }, form), {}, {
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        createdAt: today
-      })].concat(_toConsumableArray(p));
-    });
+    onAdd(_objectSpread(_objectSpread({
+      id: "db_" + Date.now()
+    }, form), {}, {
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      createdAt: today
+    }));
     setForm(_objectSpread({}, BLANK_DB));
-  }
-  function removeRecord(id) {
-    setDbRecords(function (p) {
-      return p.filter(function (r) {
-        return r.id !== id;
-      });
-    });
   }
   var filtered = dbRecords.filter(function (r) {
     if (search && !r.name.includes(search) && !r.region.includes(search) && !r.purpose.includes(search)) return false;
@@ -2428,17 +2208,9 @@ function DbView(_ref9) {
       })
     }, r.phone || "-"), /*#__PURE__*/React.createElement("td", {
       style: td
-    }, r.purpose || /*#__PURE__*/React.createElement("span", {
-      style: {
-        color: "var(--bdr)"
-      }
-    }, "-")), /*#__PURE__*/React.createElement("td", {
+    }, r.purpose || "-"), /*#__PURE__*/React.createElement("td", {
       style: td
-    }, r.region || /*#__PURE__*/React.createElement("span", {
-      style: {
-        color: "var(--bdr)"
-      }
-    }, "-")), /*#__PURE__*/React.createElement("td", {
+    }, r.region || "-"), /*#__PURE__*/React.createElement("td", {
       style: td
     }, ass ? /*#__PURE__*/React.createElement("span", {
       style: {
@@ -2467,7 +2239,7 @@ function DbView(_ref9) {
       style: td
     }, /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        return removeRecord(r.id);
+        return onDelete(r.id);
       },
       style: {
         background: "none",
@@ -2501,155 +2273,351 @@ function App() {
     _useState38 = _slicedToArray(_useState37, 2),
     settingsTab = _useState38[0],
     setSettingsTab = _useState38[1];
-  var _useState39 = useState(function () {
-      try {
-        var s = localStorage.getItem("keyops_data");
-        return s ? JSON.parse(s) : SAMPLE;
-      } catch (_unused) {
-        return SAMPLE;
-      }
-    }),
+  var _useState39 = useState(true),
     _useState40 = _slicedToArray(_useState39, 2),
-    data = _useState40[0],
-    setData = _useState40[1];
-  var _useState41 = useState(function () {
-      try {
-        var s = localStorage.getItem("keyops_assignees2");
-        return s ? JSON.parse(s) : DEFAULT_ASSIGNEES;
-      } catch (_unused2) {
-        return DEFAULT_ASSIGNEES;
-      }
-    }),
+    loading = _useState40[0],
+    setLoading = _useState40[1];
+  var _useState41 = useState(null),
     _useState42 = _slicedToArray(_useState41, 2),
-    assignees = _useState42[0],
-    setAssignees = _useState42[1];
-  var _useState43 = useState(function () {
-      try {
-        var s = localStorage.getItem("keyops_regions");
-        return s ? JSON.parse(s) : REGION_DATA;
-      } catch (_unused3) {
-        return REGION_DATA;
-      }
-    }),
+    loadError = _useState42[0],
+    setLoadError = _useState42[1];
+  var _useState43 = useState([]),
     _useState44 = _slicedToArray(_useState43, 2),
-    regionData = _useState44[0],
-    setRegionData = _useState44[1];
-  var _useState45 = useState(function () {
-      try {
-        var s = localStorage.getItem("keyops_db");
-        return s ? JSON.parse(s) : [];
-      } catch (_unused4) {
-        return [];
-      }
-    }),
+    data = _useState44[0],
+    setData = _useState44[1];
+  var _useState45 = useState(DEFAULT_ASSIGNEES),
     _useState46 = _slicedToArray(_useState45, 2),
-    dbRecords = _useState46[0],
-    setDbRecords = _useState46[1];
-  var _useState47 = useState([]),
+    assignees = _useState46[0],
+    setAssignees = _useState46[1];
+  var _useState47 = useState(REGION_DATA),
     _useState48 = _slicedToArray(_useState47, 2),
-    sel = _useState48[0],
-    setSel = _useState48[1];
-  var _useState49 = useState(""),
+    regionData = _useState48[0],
+    setRegionData = _useState48[1];
+  var _useState49 = useState([]),
     _useState50 = _slicedToArray(_useState49, 2),
-    search = _useState50[0],
-    setSearch = _useState50[1];
-  var _useState51 = useState(""),
+    dbRecords = _useState50[0],
+    setDbRecords = _useState50[1];
+  var _useState51 = useState([]),
     _useState52 = _slicedToArray(_useState51, 2),
-    fProv = _useState52[0],
-    setFProv = _useState52[1];
+    sel = _useState52[0],
+    setSel = _useState52[1];
   var _useState53 = useState(""),
     _useState54 = _slicedToArray(_useState53, 2),
-    fCity = _useState54[0],
-    setFCity = _useState54[1];
+    search = _useState54[0],
+    setSearch = _useState54[1];
   var _useState55 = useState(""),
     _useState56 = _slicedToArray(_useState55, 2),
-    fAss = _useState56[0],
-    setFAss = _useState56[1];
+    fProv = _useState56[0],
+    setFProv = _useState56[1];
   var _useState57 = useState(""),
     _useState58 = _slicedToArray(_useState57, 2),
-    fStat = _useState58[0],
-    setFStat = _useState58[1];
+    fCity = _useState58[0],
+    setFCity = _useState58[1];
   var _useState59 = useState(""),
     _useState60 = _slicedToArray(_useState59, 2),
-    fExp = _useState60[0],
-    setFExp = _useState60[1];
-  var _useState61 = useState(null),
+    fAss = _useState60[0],
+    setFAss = _useState60[1];
+  var _useState61 = useState(""),
     _useState62 = _slicedToArray(_useState61, 2),
-    editId = _useState62[0],
-    setEditId = _useState62[1];
-  var _useState63 = useState({}),
+    fStat = _useState62[0],
+    setFStat = _useState62[1];
+  var _useState63 = useState(null),
     _useState64 = _slicedToArray(_useState63, 2),
-    editForm = _useState64[0],
-    setEditForm = _useState64[1];
-  var _useState65 = useState(false),
+    editId = _useState64[0],
+    setEditId = _useState64[1];
+  var _useState65 = useState({}),
     _useState66 = _slicedToArray(_useState65, 2),
-    bulkModal = _useState66[0],
-    setBulkModal = _useState66[1];
-  var _useState67 = useState("updatedAt"),
+    editForm = _useState66[0],
+    setEditForm = _useState66[1];
+  var _useState67 = useState(false),
     _useState68 = _slicedToArray(_useState67, 2),
-    sortCol = _useState68[0],
-    setSortCol = _useState68[1];
-  var _useState69 = useState("desc"),
+    bulkModal = _useState68[0],
+    setBulkModal = _useState68[1];
+  var _useState69 = useState("updatedAt"),
     _useState70 = _slicedToArray(_useState69, 2),
-    sortDir = _useState70[0],
-    setSortDir = _useState70[1];
+    sortCol = _useState70[0],
+    setSortCol = _useState70[1];
+  var _useState71 = useState("desc"),
+    _useState72 = _slicedToArray(_useState71, 2),
+    sortDir = _useState72[0],
+    setSortDir = _useState72[1];
+  var _useState73 = useState(1),
+    _useState74 = _slicedToArray(_useState73, 2),
+    page = _useState74[0],
+    setPage = _useState74[1];
+  var PAGE_SIZE = 20;
   var fileRef = useRef();
-  useEffect(function () {
-    try {
-      localStorage.setItem("keyops_data", JSON.stringify(data));
-    } catch (_unused5) {}
-  }, [data]);
-  useEffect(function () {
-    try {
-      localStorage.setItem("keyops_assignees2", JSON.stringify(assignees));
-    } catch (_unused6) {}
-  }, [assignees]);
-  useEffect(function () {
-    try {
-      localStorage.setItem("keyops_regions", JSON.stringify(regionData));
-    } catch (_unused7) {}
-  }, [regionData]);
-  useEffect(function () {
-    try {
-      localStorage.setItem("keyops_db", JSON.stringify(dbRecords));
-    } catch (_unused8) {}
-  }, [dbRecords]);
   useEffect(function () {
     setFCity("");
   }, [fProv]);
   useEffect(function () {
     setPage(1);
   }, [search, fProv, fCity, fAss, fStat, sortCol, sortDir]);
-  var C = dark ? {
-    "--bg": "#0f172a",
-    "--surf": "#1e293b",
-    "--bdr": "#334155",
-    "--txt": "#f1f5f9",
-    "--mut": "#94a3b8",
-    "--hov": "#293548",
-    "--inp": "#1e293b"
-  } : {
-    "--bg": "#f8fafc",
-    "--surf": "#ffffff",
-    "--bdr": "#e2e8f0",
-    "--txt": "#0f172a",
-    "--mut": "#64748b",
-    "--hov": "#f1f5f9",
-    "--inp": "#ffffff"
-  };
+
+  // ── Supabase init + realtime ──
+  useEffect(function () {
+    var mounted = true;
+    function init() {
+      return _init.apply(this, arguments);
+    }
+    function _init() {
+      _init = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var _rdRes$data, _yield$Promise$all, _yield$Promise$all2, kwRes, assRes, dbRes, rdRes, initRes, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              _context.n = 1;
+              return Promise.all([sb.from('keywords').select('*'), sb.from('assignees').select('*').order('name'), sb.from('db_records').select('*').order('created_at', {
+                ascending: false
+              }), sb.from('app_settings').select('value').eq('key', 'region_data').maybeSingle(), sb.from('app_settings').select('value').eq('key', 'assignees_initialized').maybeSingle()]);
+            case 1:
+              _yield$Promise$all = _context.v;
+              _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 5);
+              kwRes = _yield$Promise$all2[0];
+              assRes = _yield$Promise$all2[1];
+              dbRes = _yield$Promise$all2[2];
+              rdRes = _yield$Promise$all2[3];
+              initRes = _yield$Promise$all2[4];
+              if (mounted) {
+                _context.n = 2;
+                break;
+              }
+              return _context.a(2);
+            case 2:
+              if (!kwRes.error) {
+                _context.n = 3;
+                break;
+              }
+              throw kwRes.error;
+            case 3:
+              setData((kwRes.data || []).map(kwFromRow));
+              // 초기화 플래그가 없을 때만 기본 담당자 삽입
+              if (initRes.data) {
+                _context.n = 8;
+                break;
+              }
+              if (!(assRes.data && assRes.data.length === 0)) {
+                _context.n = 5;
+                break;
+              }
+              _context.n = 4;
+              return sb.from('assignees').insert(DEFAULT_ASSIGNEES.map(assToRow));
+            case 4:
+              setAssignees(DEFAULT_ASSIGNEES);
+              _context.n = 6;
+              break;
+            case 5:
+              setAssignees((assRes.data || []).map(assFromRow));
+            case 6:
+              _context.n = 7;
+              return sb.from('app_settings').upsert({
+                key: 'assignees_initialized',
+                value: 'true'
+              });
+            case 7:
+              _context.n = 9;
+              break;
+            case 8:
+              setAssignees((assRes.data || []).map(assFromRow));
+            case 9:
+              setDbRecords((dbRes.data || []).map(dbFromRow));
+              if (!((_rdRes$data = rdRes.data) !== null && _rdRes$data !== void 0 && _rdRes$data.value)) {
+                _context.n = 10;
+                break;
+              }
+              setRegionData(JSON.parse(rdRes.data.value));
+              _context.n = 11;
+              break;
+            case 10:
+              _context.n = 11;
+              return sb.from('app_settings').upsert({
+                key: 'region_data',
+                value: JSON.stringify(REGION_DATA)
+              });
+            case 11:
+              _context.n = 13;
+              break;
+            case 12:
+              _context.p = 12;
+              _t = _context.v;
+              if (mounted) setLoadError(_t.message || '연결 실패');
+            case 13:
+              _context.p = 13;
+              if (mounted) setLoading(false);
+              return _context.f(13);
+            case 14:
+              return _context.a(2);
+          }
+        }, _callee, null, [[0, 12, 13, 14]]);
+      }));
+      return _init.apply(this, arguments);
+    }
+    init();
+    var ch = sb.channel('evaw-sync').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'keywords'
+    }, function (_ref8) {
+      var eventType = _ref8.eventType,
+        n = _ref8.new,
+        o = _ref8.old;
+      if (!mounted) return;
+      if (eventType === 'INSERT') setData(function (p) {
+        return p.find(function (r) {
+          return r.id === n.id;
+        }) ? p : [].concat(_toConsumableArray(p), [kwFromRow(n)]);
+      });else if (eventType === 'UPDATE') setData(function (p) {
+        return p.map(function (r) {
+          return r.id === n.id ? kwFromRow(n) : r;
+        });
+      });else if (eventType === 'DELETE') setData(function (p) {
+        return p.filter(function (r) {
+          return r.id !== o.id;
+        });
+      });
+    }).on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'assignees'
+    }, function (_ref9) {
+      var eventType = _ref9.eventType,
+        n = _ref9.new,
+        o = _ref9.old;
+      if (!mounted) return;
+      if (eventType === 'INSERT') setAssignees(function (p) {
+        return p.find(function (r) {
+          return r.id === n.id;
+        }) ? p : [].concat(_toConsumableArray(p), [assFromRow(n)]);
+      });else if (eventType === 'UPDATE') setAssignees(function (p) {
+        return p.map(function (r) {
+          return r.id === n.id ? assFromRow(n) : r;
+        });
+      });else if (eventType === 'DELETE') setAssignees(function (p) {
+        return p.filter(function (r) {
+          return r.id !== o.id;
+        });
+      });
+    }).on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'db_records'
+    }, function (_ref0) {
+      var eventType = _ref0.eventType,
+        n = _ref0.new,
+        o = _ref0.old;
+      if (!mounted) return;
+      if (eventType === 'INSERT') setDbRecords(function (p) {
+        return p.find(function (r) {
+          return r.id === n.id;
+        }) ? p : [dbFromRow(n)].concat(_toConsumableArray(p));
+      });else if (eventType === 'UPDATE') setDbRecords(function (p) {
+        return p.map(function (r) {
+          return r.id === n.id ? dbFromRow(n) : r;
+        });
+      });else if (eventType === 'DELETE') setDbRecords(function (p) {
+        return p.filter(function (r) {
+          return r.id !== o.id;
+        });
+      });
+    }).on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'app_settings'
+    }, function (_ref1) {
+      var n = _ref1.new;
+      if (!mounted) return;
+      if (n.key === 'region_data') setRegionData(JSON.parse(n.value));
+    }).subscribe();
+    return function () {
+      mounted = false;
+      sb.removeChannel(ch);
+    };
+  }, []);
+
+  // ── CRUD ──
+  var addKeywords = useCallback(function (kws) {
+    setData(function (p) {
+      var ids = new Set(p.map(function (r) {
+        return r.id;
+      }));
+      return [].concat(_toConsumableArray(p), _toConsumableArray(kws.filter(function (k) {
+        return !ids.has(k.id);
+      })));
+    });
+    sb.from('keywords').insert(kws.map(kwToRow));
+  }, []);
+  var updateKeyword = useCallback(function (kw) {
+    setData(function (p) {
+      return p.map(function (r) {
+        return r.id === kw.id ? kw : r;
+      });
+    });
+    sb.from('keywords').upsert(kwToRow(kw));
+  }, []);
+  var deleteKeywords = useCallback(function (ids) {
+    setData(function (p) {
+      return p.filter(function (r) {
+        return !ids.includes(r.id);
+      });
+    });
+    sb.from('keywords').delete().in('id', ids);
+  }, []);
+  var addAssignee = useCallback(function (a) {
+    setAssignees(function (p) {
+      return [].concat(_toConsumableArray(p), [a]);
+    });
+    sb.from('assignees').insert(assToRow(a));
+  }, []);
+  var editAssignee = useCallback(function (a) {
+    setAssignees(function (p) {
+      return p.map(function (x) {
+        return x.id === a.id ? a : x;
+      });
+    });
+    sb.from('assignees').upsert(assToRow(a));
+  }, []);
+  var removeAssignee = useCallback(function (id, len) {
+    if (len <= 1) {
+      alert('최소 1명 이상 필요합니다.');
+      return;
+    }
+    setAssignees(function (p) {
+      return p.filter(function (x) {
+        return x.id !== id;
+      });
+    });
+    sb.from('assignees').delete().eq('id', id);
+  }, []);
+  var saveRegionData = useCallback(function (rd) {
+    setRegionData(rd);
+    sb.from('app_settings').upsert({
+      key: 'region_data',
+      value: JSON.stringify(rd)
+    });
+  }, []);
+  var addDbRec = useCallback(function (r) {
+    setDbRecords(function (p) {
+      return [r].concat(_toConsumableArray(p));
+    });
+    sb.from('db_records').insert(dbToRow(r));
+  }, []);
+  var deleteDbRec = useCallback(function (id) {
+    setDbRecords(function (p) {
+      return p.filter(function (r) {
+        return r.id !== id;
+      });
+    });
+    sb.from('db_records').delete().eq('id', id);
+  }, []);
   var todayStr = useMemo(function () {
     var d = new Date();
     return "".concat(d.getFullYear(), "\uB144 ").concat(d.getMonth() + 1, "\uC6D4 ").concat(d.getDate(), "\uC77C");
   }, []);
-  var _useState71 = useState(1),
-    _useState72 = _slicedToArray(_useState71, 2),
-    page = _useState72[0],
-    setPage = _useState72[1];
-  var PAGE_SIZE = 20;
   var filtered = useMemo(function () {
     var r = _toConsumableArray(data).filter(function (x) {
       return x.assignee && x.assignee !== "";
-    }); // 담당자 배정된 것만
+    });
     if (search) r = r.filter(function (x) {
       var _x$subKeyword, _x$articleUrl, _assignees$find;
       return x.mainKeyword.includes(search) || ((_x$subKeyword = x.subKeyword) === null || _x$subKeyword === void 0 ? void 0 : _x$subKeyword.includes(search)) || ((_x$articleUrl = x.articleUrl) === null || _x$articleUrl === void 0 ? void 0 : _x$articleUrl.includes(search)) || ((_assignees$find = assignees.find(function (a) {
@@ -2668,114 +2636,42 @@ function App() {
     if (fStat) r = r.filter(function (x) {
       return x.status === fStat;
     });
-    // 수정일 역순 기본 정렬, 컬럼 클릭 시 해당 컬럼 정렬
-    if (sortCol === "updatedAt" || !sortCol) {
-      r.sort(function (a, b) {
-        return sortDir === "asc" ? String(a.updatedAt || "").localeCompare(String(b.updatedAt || "")) : String(b.updatedAt || "").localeCompare(String(a.updatedAt || ""));
-      });
-    } else {
-      r.sort(function (a, b) {
-        var _a$sortCol, _b$sortCol;
-        var av = (_a$sortCol = a[sortCol]) !== null && _a$sortCol !== void 0 ? _a$sortCol : "",
-          bv = (_b$sortCol = b[sortCol]) !== null && _b$sortCol !== void 0 ? _b$sortCol : "";
-        if (typeof av === "number") return sortDir === "asc" ? av - bv : bv - av;
-        return sortDir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
-      });
-    }
+    r.sort(function (a, b) {
+      var _a$sortCol, _b$sortCol;
+      var av = (_a$sortCol = a[sortCol]) !== null && _a$sortCol !== void 0 ? _a$sortCol : "",
+        bv = (_b$sortCol = b[sortCol]) !== null && _b$sortCol !== void 0 ? _b$sortCol : "";
+      if (typeof av === "number") return sortDir === "asc" ? av - bv : bv - av;
+      return sortDir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+    });
     return r;
   }, [data, search, fProv, fCity, fAss, fStat, sortCol, sortDir, assignees]);
-  var stats = useMemo(function () {
-    var byS = function byS(s) {
-      return data.filter(function (d) {
-        return d.status === s;
-      }).length;
-    };
-    var avgCTR = data.length ? (data.reduce(function (s, d) {
-      return s + (d.ctr || 0);
-    }, 0) / data.length).toFixed(1) : 0;
-    var ranked = data.filter(function (d) {
-      return d.currentRank;
-    });
-    var avgRank = ranked.length ? (ranked.reduce(function (s, d) {
-      return s + d.currentRank;
-    }, 0) / ranked.length).toFixed(1) : 0;
-    var up = data.filter(function (d) {
-      return d.prevRank && d.currentRank && d.currentRank < d.prevRank;
-    }).length;
-    var dn = data.filter(function (d) {
-      return d.prevRank && d.currentRank && d.currentRank > d.prevRank;
-    }).length;
-    return {
-      total: data.length,
-      미작성: byS("미작성"),
-      작성중: byS("작성중"),
-      검수중: byS("검수중"),
-      완료: byS("완료"),
-      보류: byS("보류"),
-      avgCTR: avgCTR,
-      avgRank: avgRank,
-      up: up,
-      dn: dn
-    };
-  }, [data]);
   var assigneeStats = useMemo(function () {
     return assignees.map(function (a) {
       var rows = data.filter(function (d) {
         return d.assignee === a.id;
       });
-      var done = rows.filter(function (d) {
-        return d.status === "완료";
+      var articleCount = rows.filter(function (d) {
+        return d.articleUrl && d.articleUrl.trim() !== "";
       }).length;
-      var up = rows.filter(function (d) {
-        return d.prevRank && d.currentRank && d.currentRank < d.prevRank;
+      var dbCount = dbRecords.filter(function (d) {
+        return d.assignee === a.id;
       }).length;
-      var dn = rows.filter(function (d) {
-        return d.prevRank && d.currentRank && d.currentRank > d.prevRank;
-      }).length;
-      var rk = rows.filter(function (d) {
-        return d.currentRank;
-      });
-      var avgRank = rk.length ? (rk.reduce(function (s, d) {
-        return s + d.currentRank;
-      }, 0) / rk.length).toFixed(1) : "-";
-      var avgCTR = rows.length ? (rows.reduce(function (s, d) {
-        return s + (d.ctr || 0);
-      }, 0) / rows.length).toFixed(1) : 0;
       return _objectSpread(_objectSpread({}, a), {}, {
         total: rows.length,
-        done: done,
-        doneRate: rows.length ? (done / rows.length * 100).toFixed(0) : 0,
-        avgRank: avgRank,
-        avgCTR: avgCTR,
-        up: up,
-        dn: dn
+        articleCount: articleCount,
+        dbCount: dbCount
       });
     });
-  }, [data, assignees]);
+  }, [data, assignees, dbRecords]);
   var regionStats = useMemo(function () {
     return PROVINCE_LIST.map(function (r) {
       var rows = data.filter(function (d) {
         return d.province === r;
       });
       if (!rows.length) return null;
-      var rk = rows.filter(function (d) {
-        return d.currentRank;
-      });
-      var avgRank = rk.length ? (rk.reduce(function (s, d) {
-        return s + d.currentRank;
-      }, 0) / rk.length).toFixed(1) : "-";
-      var avgCTR = rows.length ? (rows.reduce(function (s, d) {
-        return s + (d.ctr || 0);
-      }, 0) / rows.length).toFixed(1) : 0;
-      var avgScore = rows.length ? (rows.reduce(function (s, d) {
-        return s + (d.exposureScore || 0);
-      }, 0) / rows.length).toFixed(0) : 0;
       return {
         region: r,
-        total: rows.length,
-        avgRank: avgRank,
-        avgCTR: avgCTR,
-        avgScore: avgScore
+        total: rows.length
       };
     }).filter(Boolean);
   }, [data]);
@@ -2787,40 +2683,30 @@ function App() {
       setSortDir("asc");
     }
   };
-  var startEdit = function startEdit(r) {
-    setEditId(r.id);
-    setEditForm(_objectSpread({}, r));
-  };
   var saveEdit = function saveEdit() {
-    setData(function (p) {
-      return p.map(function (r) {
-        return r.id === editId ? _objectSpread(_objectSpread({}, editForm), {}, {
-          updatedAt: new Date().toISOString().slice(0, 10)
-        }) : r;
-      });
+    var u = _objectSpread(_objectSpread({}, editForm), {}, {
+      updatedAt: new Date().toISOString().slice(0, 10)
     });
+    updateKeyword(u);
     setEditId(null);
   };
   var delSel = function delSel() {
-    setData(function (p) {
-      return p.filter(function (r) {
-        return !sel.includes(r.id);
-      });
-    });
+    deleteKeywords(sel);
     setSel([]);
   };
-  var handleBulkSave = useCallback(function (newKws) {
-    setData(function (p) {
-      return [].concat(_toConsumableArray(p), _toConsumableArray(newKws));
-    });
-  }, []);
+  var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  var safePage = Math.min(page, totalPages);
+  var pagedRows = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  var selAll = pagedRows.length > 0 && pagedRows.every(function (r) {
+    return sel.includes(r.id);
+  });
   var exportCSV = function exportCSV() {
-    var h = ["도/광역시", "시/군", "구", "동", "메인키워드", "담당자", "상태", "현재순위", "이전순위", "노출점수", "CTR", "클릭수", "노출수", "게시글URL", "작성일", "수정일"];
+    var h = ["도/광역시", "시/군", "메인키워드", "서브키워드", "담당자", "상태", "게시글URL", "작성일", "수정일"];
     var rows = data.map(function (d) {
       var _assignees$find2;
-      return [d.province, d.city, d.district, d.dong, d.mainKeyword, ((_assignees$find2 = assignees.find(function (a) {
+      return [d.province, d.city, d.mainKeyword, d.subKeyword, ((_assignees$find2 = assignees.find(function (a) {
         return a.id === d.assignee;
-      })) === null || _assignees$find2 === void 0 ? void 0 : _assignees$find2.name) || "", d.status, d.currentRank, d.prevRank, d.exposureScore, d.ctr, d.clicks, d.impressions, d.articleUrl, d.createdAt, d.updatedAt];
+      })) === null || _assignees$find2 === void 0 ? void 0 : _assignees$find2.name) || "", d.status, d.articleUrl, d.createdAt, d.updatedAt];
     });
     var csv = [h].concat(_toConsumableArray(rows)).map(function (r) {
       return r.map(function (c) {
@@ -2835,56 +2721,23 @@ function App() {
     a.download = "\uB9C8\uCF00\uD305\uD0A4\uC6CC\uB4DC_".concat(new Date().toISOString().slice(0, 10), ".csv");
     a.click();
   };
-  var handleCSV = function handleCSV(e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function (ev) {
-      var lines = ev.target.result.split("\n").filter(Boolean);
-      var nr = lines.slice(1).map(function (line, i) {
-        var v = line.split(",").map(function (x) {
-          return x.replace(/"/g, "").trim();
-        });
-        var ass = assignees.find(function (a) {
-          return a.name === v[5];
-        }) || assignees[0];
-        return {
-          id: "imp_" + Date.now() + i,
-          province: v[0] || "",
-          city: v[1] || "",
-          district: v[2] || "",
-          dong: v[3] || "",
-          mainKeyword: v[4] || "",
-          assignee: (ass === null || ass === void 0 ? void 0 : ass.id) || "",
-          status: v[6] || "미작성",
-          currentRank: parseInt(v[7]) || 0,
-          prevRank: parseInt(v[8]) || 0,
-          exposureScore: parseInt(v[9]) || 0,
-          ctr: parseFloat(v[10]) || 0,
-          clicks: parseInt(v[11]) || 0,
-          impressions: parseInt(v[12]) || 0,
-          articleUrl: v[13] || "",
-          createdAt: v[14] || new Date().toISOString().slice(0, 10),
-          updatedAt: v[15] || new Date().toISOString().slice(0, 10),
-          lastChecked: new Date().toISOString().slice(0, 10),
-          history: []
-        };
-      }).filter(function (r) {
-        return r.mainKeyword;
-      });
-      setData(function (p) {
-        return [].concat(_toConsumableArray(p), _toConsumableArray(nr));
-      });
-    };
-    reader.readAsText(file, "UTF-8");
-    e.target.value = "";
+  var C = dark ? {
+    "--bg": "#0f172a",
+    "--surf": "#1e293b",
+    "--bdr": "#334155",
+    "--txt": "#f1f5f9",
+    "--mut": "#94a3b8",
+    "--hov": "#293548",
+    "--inp": "#1e293b"
+  } : {
+    "--bg": "#f8fafc",
+    "--surf": "#ffffff",
+    "--bdr": "#e2e8f0",
+    "--txt": "#0f172a",
+    "--mut": "#64748b",
+    "--hov": "#f1f5f9",
+    "--inp": "#ffffff"
   };
-  var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  var safePage = Math.min(page, totalPages);
-  var pagedRows = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
-  var selAll = pagedRows.length > 0 && pagedRows.every(function (r) {
-    return sel.includes(r.id);
-  });
   var inp = {
     background: "var(--inp)",
     border: "1px solid var(--bdr)",
@@ -2917,6 +2770,71 @@ function App() {
   };
   var editProvCities = editForm.province && ((_regionData$editForm$ = regionData[editForm.province]) === null || _regionData$editForm$ === void 0 ? void 0 : _regionData$editForm$.cities) || [];
   var editProvIsMetro = editForm.province && ((_regionData$editForm$2 = regionData[editForm.province]) === null || _regionData$editForm$2 === void 0 ? void 0 : _regionData$editForm$2.type) !== "province";
+  if (loading) return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread(_objectSpread({}, C), {}, {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      background: "var(--bg)",
+      color: "var(--txt)",
+      gap: 16
+    })
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 36,
+      height: 36,
+      border: "3px solid #3b82f6",
+      borderTopColor: "transparent",
+      borderRadius: "50%",
+      animation: "spin 0.8s linear infinite"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 600,
+      color: "var(--mut)"
+    }
+  }, "Supabase \uC5F0\uACB0 \uC911..."));
+  if (loadError) return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread(_objectSpread({}, C), {}, {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      background: "var(--bg)",
+      color: "var(--txt)",
+      gap: 12
+    })
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24
+    }
+  }, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700
+    }
+  }, "\uC5F0\uACB0 \uC624\uB958"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "var(--mut)"
+    }
+  }, loadError), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return window.location.reload();
+    },
+    style: {
+      padding: "8px 20px",
+      borderRadius: 8,
+      border: "none",
+      background: "#3b82f6",
+      color: "#fff",
+      cursor: "pointer",
+      fontWeight: 600
+    }
+  }, "\uB2E4\uC2DC \uC2DC\uB3C4"));
   return /*#__PURE__*/React.createElement("div", {
     style: _objectSpread(_objectSpread({}, C), {}, {
       fontFamily: "'Pretendard','Apple SD Gothic Neo',sans-serif",
@@ -3013,8 +2931,7 @@ function App() {
     style: {
       fontSize: 12,
       color: "var(--mut)",
-      whiteSpace: "nowrap",
-      paddingLeft: 4
+      whiteSpace: "nowrap"
     }
   }, "\uD83D\uDCC5 ", todayStr)), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3022,22 +2939,16 @@ function App() {
       padding: "20px 24px",
       overflowX: "hidden"
     }
-  }, view === "DB 생산" && /*#__PURE__*/React.createElement(DbView, {
-    dbRecords: dbRecords,
-    setDbRecords: setDbRecords,
-    assignees: assignees,
-    regionData: regionData,
-    dark: dark
-  }), view === "설정" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, view === "설정" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 4,
       marginBottom: 20
     }
-  }, [["assignee", "👤 담당자 관리"], ["region", "🗺️ 지역 관리"]].map(function (_ref0) {
-    var _ref1 = _slicedToArray(_ref0, 2),
-      k = _ref1[0],
-      lb = _ref1[1];
+  }, [["assignee", "👤 담당자 관리"], ["region", "🗺️ 지역 관리"]].map(function (_ref10) {
+    var _ref11 = _slicedToArray(_ref10, 2),
+      k = _ref11[0],
+      lb = _ref11[1];
     return /*#__PURE__*/React.createElement("button", {
       key: k,
       onClick: function onClick() {
@@ -3056,12 +2967,15 @@ function App() {
     }, lb);
   })), settingsTab === "assignee" && /*#__PURE__*/React.createElement(AssigneeManager, {
     assignees: assignees,
-    setAssignees: setAssignees
+    onAdd: addAssignee,
+    onSave: editAssignee,
+    onDelete: removeAssignee
   }), settingsTab === "region" && /*#__PURE__*/React.createElement(RegionManager, {
     regionData: regionData,
-    setRegionData: setRegionData,
+    onSaveRegionData: saveRegionData,
     data: data,
-    setData: setData,
+    onUpdateKeyword: updateKeyword,
+    onAddKeywords: addKeywords,
     assignees: assignees
   })), view === "담당자 성과" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3078,12 +2992,6 @@ function App() {
   }, assigneeStats.filter(function (a) {
     return a.total > 0;
   }).map(function (a) {
-    var articleCount = data.filter(function (d) {
-      return d.assignee === a.id && d.articleUrl && d.articleUrl.trim() !== "";
-    }).length;
-    var dbCount = dbRecords.filter(function (d) {
-      return d.assignee === a.id;
-    }).length;
     return /*#__PURE__*/React.createElement("div", {
       key: a.id,
       style: {
@@ -3152,7 +3060,7 @@ function App() {
         fontWeight: 800,
         color: "#2563eb"
       }
-    }, articleCount), /*#__PURE__*/React.createElement("div", {
+    }, a.articleCount), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 11,
         color: "var(--mut)",
@@ -3181,7 +3089,7 @@ function App() {
         fontWeight: 800,
         color: "#16a34a"
       }
-    }, dbCount), /*#__PURE__*/React.createElement("div", {
+    }, a.dbCount), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 11,
         color: "var(--mut)",
@@ -3249,7 +3157,13 @@ function App() {
       textAlign: "center",
       color: "var(--mut)"
     })
-  }, "\uB370\uC774\uD130\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")))))), view === "키워드 관리" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, "\uB370\uC774\uD130\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")))))), view === "DB 생산" && /*#__PURE__*/React.createElement(DbView, {
+    dbRecords: dbRecords,
+    onAdd: addDbRec,
+    onDelete: deleteDbRec,
+    assignees: assignees,
+    dark: dark
+  }), view === "키워드 관리" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
@@ -3366,35 +3280,13 @@ function App() {
       fontSize: 12,
       cursor: "pointer"
     }
-  }, "\u2B07 CSV"), /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      var _fileRef$current;
-      return (_fileRef$current = fileRef.current) === null || _fileRef$current === void 0 ? void 0 : _fileRef$current.click();
-    },
-    style: {
-      padding: "6px 12px",
-      borderRadius: 8,
-      border: "1px solid var(--bdr)",
-      background: "var(--surf)",
-      color: "var(--txt)",
-      fontSize: 12,
-      cursor: "pointer"
-    }
-  }, "\u2B06 \uC5C5\uB85C\uB4DC"), /*#__PURE__*/React.createElement("input", {
-    ref: fileRef,
-    type: "file",
-    accept: ".csv",
-    onChange: handleCSV,
-    style: {
-      display: "none"
-    }
-  }))), /*#__PURE__*/React.createElement("div", {
+  }, "\u2B07 CSV"))), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12,
       color: "var(--mut)",
       marginBottom: 8
     }
-  }, "\uCD1D ", filtered.length, "\uAC1C \uD0A4\uC6CC\uB4DC (\uB2F4\uB2F9\uC790 \uBC30\uC815) \xB7 ", safePage, "/", totalPages, " \uD398\uC774\uC9C0"), /*#__PURE__*/React.createElement("div", {
+  }, "\uCD1D ", filtered.length, "\uAC1C \xB7 ", safePage, "/", totalPages, " \uD398\uC774\uC9C0"), /*#__PURE__*/React.createElement("div", {
     style: {
       background: "var(--surf)",
       border: "1px solid var(--bdr)",
@@ -3405,7 +3297,7 @@ function App() {
     style: {
       width: "100%",
       borderCollapse: "collapse",
-      minWidth: 900
+      minWidth: 820
     }
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
     style: {
@@ -3431,10 +3323,10 @@ function App() {
         });
       });
     }
-  })), [["지역", "province"], ["메인키워드", "mainKeyword"], ["담당자", "assignee"], ["상태", "status"], ["게시글 URL", "articleUrl"], ["수정일", "updatedAt"], ["액션", null]].map(function (_ref10) {
-    var _ref11 = _slicedToArray(_ref10, 2),
-      lb = _ref11[0],
-      c = _ref11[1];
+  })), [["지역", "province"], ["메인키워드", "mainKeyword"], ["담당자", "assignee"], ["상태", "status"], ["게시글 URL", "articleUrl"], ["수정일", "updatedAt"], ["액션", null]].map(function (_ref12) {
+    var _ref13 = _slicedToArray(_ref12, 2),
+      lb = _ref13[0],
+      c = _ref13[1];
     return /*#__PURE__*/React.createElement("th", {
       key: lb,
       style: th,
@@ -3729,7 +3621,8 @@ function App() {
       style: td
     }, /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        return startEdit(row);
+        setEditId(row.id);
+        setEditForm(_objectSpread({}, row));
       },
       style: {
         padding: "4px 10px",
@@ -3860,7 +3753,7 @@ function App() {
     onClose: function onClose() {
       return setBulkModal(false);
     },
-    onSave: handleBulkSave,
+    onSave: addKeywords,
     assignees: assignees,
     regionData: regionData,
     defaultProvince: "",
