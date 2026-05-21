@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>EVAWpet 마케팅</title>
+<title>EVAW pet 마케팅</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -535,18 +535,18 @@ function BulkAddModal(_ref6) {
     _useState6 = _slicedToArray(_useState5, 2),
     rawText = _useState6[0],
     setRawText = _useState6[1];
-  var _useState7 = useState(""),
+  var _useState7 = useState([]),
     _useState8 = _slicedToArray(_useState7, 2),
-    bulkAssignee = _useState8[0],
-    setBulkAssignee = _useState8[1];
-  var _useState9 = useState([]),
+    rows = _useState8[0],
+    setRows = _useState8[1]; // [{id, keyword, assigneeIds:[], status}]
+  var _useState9 = useState(1),
     _useState0 = _slicedToArray(_useState9, 2),
-    rows = _useState0[0],
-    setRows = _useState0[1]; // [{keyword, assignee, status}]
-  var _useState1 = useState(1),
+    step = _useState0[0],
+    setStep = _useState0[1];
+  var _useState1 = useState(null),
     _useState10 = _slicedToArray(_useState1, 2),
-    step = _useState10[0],
-    setStep = _useState10[1]; // 1=입력, 2=배정
+    activeId = _useState10[0],
+    setActiveId = _useState10[1]; // 현재 선택된 키워드 id
 
   useEffect(function () {
     if (open) {
@@ -555,7 +555,7 @@ function BulkAddModal(_ref6) {
       setRawText("");
       setRows([]);
       setStep(1);
-      setBulkAssignee("");
+      setActiveId(null);
     }
   }, [open]);
   var isProvince = province && ((_regionData$province = regionData[province]) === null || _regionData$province === void 0 ? void 0 : _regionData$province.type) === "province";
@@ -567,26 +567,41 @@ function BulkAddModal(_ref6) {
       return {
         id: Date.now() + Math.random(),
         keyword: k,
-        assignee: "",
+        assigneeIds: [],
         status: "미작성"
       };
     }));
     setStep(2);
+    setActiveId(null);
   }
-  function applyBulkAssignee() {
-    if (!bulkAssignee) return;
+  function toggleAssignee(rowId, assId) {
     setRows(function (r) {
       return r.map(function (row) {
+        if (row.id !== rowId) return row;
+        var has = row.assigneeIds.includes(assId);
         return _objectSpread(_objectSpread({}, row), {}, {
-          assignee: bulkAssignee
+          assigneeIds: has ? row.assigneeIds.filter(function (x) {
+            return x !== assId;
+          }) : [].concat(_toConsumableArray(row.assigneeIds), [assId])
         });
       });
     });
   }
-  function updateRow(id, field, val) {
+  function applyBulkAssignee(assId) {
     setRows(function (r) {
       return r.map(function (row) {
-        return row.id === id ? _objectSpread(_objectSpread({}, row), {}, _defineProperty({}, field, val)) : row;
+        return _objectSpread(_objectSpread({}, row), {}, {
+          assigneeIds: row.assigneeIds.includes(assId) ? row.assigneeIds : [].concat(_toConsumableArray(row.assigneeIds), [assId])
+        });
+      });
+    });
+  }
+  function clearAssignees(rowId) {
+    setRows(function (r) {
+      return r.map(function (row) {
+        return row.id === rowId ? _objectSpread(_objectSpread({}, row), {}, {
+          assigneeIds: []
+        }) : row;
       });
     });
   }
@@ -596,36 +611,69 @@ function BulkAddModal(_ref6) {
         return row.id !== id;
       });
     });
+    if (activeId === id) setActiveId(null);
   }
   function handleSave() {
     var today = new Date().toISOString().slice(0, 10);
-    var newKws = rows.map(function (row) {
-      return {
-        id: "k" + Date.now() + Math.random(),
-        province: province,
-        city: isProvince ? city : "",
-        district: "",
-        dong: "",
-        mainKeyword: row.keyword,
-        assignee: row.assignee,
-        status: row.status,
-        createdAt: today,
-        updatedAt: today,
-        lastChecked: today,
-        exposureScore: 0,
-        currentRank: 0,
-        prevRank: 0,
-        ctr: 0,
-        clicks: 0,
-        impressions: 0,
-        articleUrl: "",
-        history: []
-      };
+    var newKws = [];
+    rows.forEach(function (row) {
+      if (row.assigneeIds.length === 0) {
+        newKws.push({
+          id: "k" + Date.now() + Math.random(),
+          province: province,
+          city: isProvince ? city : "",
+          district: "",
+          dong: "",
+          mainKeyword: row.keyword,
+          assignee: "",
+          status: row.status,
+          createdAt: today,
+          updatedAt: today,
+          lastChecked: today,
+          exposureScore: 0,
+          currentRank: 0,
+          prevRank: 0,
+          ctr: 0,
+          clicks: 0,
+          impressions: 0,
+          articleUrl: "",
+          history: []
+        });
+      } else {
+        row.assigneeIds.forEach(function (aid) {
+          newKws.push({
+            id: "k" + Date.now() + Math.random(),
+            province: province,
+            city: isProvince ? city : "",
+            district: "",
+            dong: "",
+            mainKeyword: row.keyword,
+            assignee: aid,
+            status: row.status,
+            createdAt: today,
+            updatedAt: today,
+            lastChecked: today,
+            exposureScore: 0,
+            currentRank: 0,
+            prevRank: 0,
+            ctr: 0,
+            clicks: 0,
+            impressions: 0,
+            articleUrl: "",
+            history: []
+          });
+        });
+      }
     });
     onSave(newKws);
     onClose();
   }
-  if (!open) return null;
+  var activeRow = rows.find(function (r) {
+    return r.id === activeId;
+  });
+  var assignedCount = rows.filter(function (r) {
+    return r.assigneeIds.length > 0;
+  }).length;
   var inp = {
     background: "var(--inp)",
     border: "1px solid var(--bdr)",
@@ -636,6 +684,7 @@ function BulkAddModal(_ref6) {
     outline: "none",
     width: "100%"
   };
+  if (!open) return null;
   return /*#__PURE__*/React.createElement("div", {
     style: {
       position: "fixed",
@@ -653,7 +702,7 @@ function BulkAddModal(_ref6) {
       border: "1px solid var(--bdr)",
       borderRadius: 16,
       padding: 0,
-      width: 720,
+      width: 820,
       maxHeight: "88vh",
       display: "flex",
       flexDirection: "column",
@@ -664,7 +713,7 @@ function BulkAddModal(_ref6) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "18px 24px",
+      padding: "16px 24px",
       borderBottom: "1px solid var(--bdr)",
       display: "flex",
       alignItems: "center",
@@ -682,7 +731,7 @@ function BulkAddModal(_ref6) {
       color: "var(--mut)",
       marginTop: 2
     }
-  }, step === 1 ? "1단계: 키워드 입력" : "2단계: 담당자 배정", " \xB7 ", rows.length > 0 ? "".concat(rows.length, "\uAC1C \uD0A4\uC6CC\uB4DC") : "")), /*#__PURE__*/React.createElement("button", {
+  }, step === 1 ? "1단계: 키워드 입력" : "2\uB2E8\uACC4: \uB2F4\uB2F9\uC790 \uBC30\uC815 \xB7 ".concat(assignedCount, "/").concat(rows.length, "\uAC1C \uBC30\uC815\uB428"))), /*#__PURE__*/React.createElement("button", {
     onClick: onClose,
     style: {
       background: "none",
@@ -694,7 +743,7 @@ function BulkAddModal(_ref6) {
     }
   }, "\xD7")), /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "14px 24px",
+      padding: "12px 24px",
       borderBottom: "1px solid var(--bdr)",
       display: "flex",
       gap: 12,
@@ -705,8 +754,7 @@ function BulkAddModal(_ref6) {
     style: {
       display: "flex",
       alignItems: "center",
-      gap: 8,
-      flex: 1
+      gap: 8
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -735,8 +783,7 @@ function BulkAddModal(_ref6) {
     style: {
       display: "flex",
       alignItems: "center",
-      gap: 8,
-      flex: 1
+      gap: 8
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -819,172 +866,326 @@ function BulkAddModal(_ref6) {
       fontWeight: 700,
       cursor: parseKeywords(rawText).length ? "pointer" : "not-allowed"
     }
-  }, "\uB2E4\uC74C: \uB2F4\uB2F9\uC790 \uBC30\uC815 \u2192"))), step === 2 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, "\uB2E4\uC74C: \uB2F4\uB2F9\uC790 \uBC30\uC815 \u2192"))), step === 2 && /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "12px 24px",
+      flex: 1,
+      display: "grid",
+      gridTemplateColumns: "1fr 240px",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      borderRight: "1px solid var(--bdr)",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 16px",
       borderBottom: "1px solid var(--bdr)",
+      background: "var(--hov)",
+      flexShrink: 0,
       display: "flex",
       alignItems: "center",
-      gap: 10,
-      flexShrink: 0,
-      background: "var(--hov)"
+      gap: 8,
+      flexWrap: "wrap"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 12,
-      fontWeight: 600,
-      color: "var(--mut)",
-      whiteSpace: "nowrap"
-    }
-  }, "\uC804\uCCB4 \uC77C\uAD04 \uBC30\uC815"), /*#__PURE__*/React.createElement("select", {
-    value: bulkAssignee,
-    onChange: function onChange(e) {
-      return setBulkAssignee(e.target.value);
-    },
-    style: _objectSpread(_objectSpread({}, inp), {}, {
-      width: 160
-    })
-  }, /*#__PURE__*/React.createElement("option", {
-    value: ""
-  }, "\uB2F4\uB2F9\uC790 \uC120\uD0DD"), assignees.map(function (a) {
-    return /*#__PURE__*/React.createElement("option", {
-      key: a.id,
-      value: a.id
-    }, a.name, a.affiliation ? " (".concat(a.affiliation, ")") : "");
-  })), /*#__PURE__*/React.createElement("button", {
-    onClick: applyBulkAssignee,
-    disabled: !bulkAssignee,
-    style: {
-      padding: "5px 14px",
-      borderRadius: 7,
-      border: "none",
-      background: bulkAssignee ? "#3b82f6" : "#93c5fd",
-      color: "#fff",
-      fontSize: 12,
-      fontWeight: 600,
-      cursor: bulkAssignee ? "pointer" : "not-allowed",
-      whiteSpace: "nowrap"
-    }
-  }, "\uC804\uCCB4 \uC801\uC6A9"), /*#__PURE__*/React.createElement("span", {
-    style: {
       fontSize: 11,
-      color: "var(--mut)",
-      marginLeft: "auto"
+      fontWeight: 700,
+      color: "var(--mut)"
     }
-  }, rows.filter(function (r) {
-    return r.assignee;
-  }).length, "/", rows.length, " \uBC30\uC815 \uC644\uB8CC"), /*#__PURE__*/React.createElement("button", {
+  }, "\uC804\uCCB4 \uC77C\uAD04 \uBC30\uC815"), assignees.map(function (a) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: a.id,
+      onClick: function onClick() {
+        return applyBulkAssignee(a.id);
+      },
+      style: {
+        padding: "3px 10px",
+        borderRadius: 6,
+        border: "1px solid var(--bdr)",
+        background: "var(--surf)",
+        color: "var(--txt)",
+        fontSize: 11,
+        fontWeight: 600,
+        cursor: "pointer",
+        whiteSpace: "nowrap"
+      }
+    }, "+", a.name);
+  }), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       return setStep(1);
     },
     style: {
-      padding: "5px 12px",
-      borderRadius: 7,
+      marginLeft: "auto",
+      padding: "3px 10px",
+      borderRadius: 6,
       border: "1px solid var(--bdr)",
       background: "transparent",
       color: "var(--mut)",
-      fontSize: 12,
+      fontSize: 11,
       cursor: "pointer"
     }
   }, "\u2190 \uB2E4\uC2DC \uC785\uB825")), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1,
-      overflowY: "auto"
+      overflowY: "auto",
+      padding: "12px 16px",
+      display: "flex",
+      flexDirection: "column",
+      gap: 6
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr 180px 110px 32px",
-      gap: 8,
-      padding: "8px 24px",
-      borderBottom: "1px solid var(--bdr)",
-      fontSize: 11,
-      fontWeight: 700,
-      color: "var(--mut)",
-      textTransform: "uppercase",
-      letterSpacing: "0.05em",
-      background: "var(--surf)"
-    }
-  }, /*#__PURE__*/React.createElement("div", null, "\uD0A4\uC6CC\uB4DC"), /*#__PURE__*/React.createElement("div", null, "\uB2F4\uB2F9\uC790"), /*#__PURE__*/React.createElement("div", null, "\uC0C1\uD0DC"), /*#__PURE__*/React.createElement("div", null)), rows.map(function (row, i) {
-    var a = assignees.find(function (x) {
-      return x.id === row.assignee;
-    });
+  }, rows.map(function (row, i) {
+    var isActive = activeId === row.id;
+    var hasAssignees = row.assigneeIds.length > 0;
     return /*#__PURE__*/React.createElement("div", {
       key: row.id,
+      onClick: function onClick() {
+        return setActiveId(isActive ? null : row.id);
+      },
       style: {
-        display: "grid",
-        gridTemplateColumns: "1fr 180px 110px 32px",
-        gap: 8,
-        padding: "8px 24px",
-        borderBottom: "1px solid var(--bdr)",
+        display: "flex",
         alignItems: "center",
-        background: i % 2 === 0 ? "var(--surf)" : true ? "var(--hov)" : "#1a2233"
+        gap: 8,
+        padding: "9px 12px",
+        borderRadius: 8,
+        border: "1px solid " + (isActive ? "#3b82f6" : hasAssignees ? "var(--bdr)" : "#fcd34d"),
+        background: isActive ? "#eff6ff" : hasAssignees ? "var(--surf)" : "#fefce8",
+        cursor: "pointer",
+        transition: "all 0.1s"
       }
-    }, /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("span", {
       style: {
         fontWeight: 500,
         fontSize: 13,
+        flex: 1,
         overflow: "hidden",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap"
-      },
-      title: row.keyword
-    }, row.keyword), /*#__PURE__*/React.createElement("select", {
-      value: row.assignee,
-      onChange: function onChange(e) {
-        return updateRow(row.id, "assignee", e.target.value);
-      },
-      style: {
-        background: row.assignee ? "var(--inp)" : "#fef3c7",
-        border: "1px solid " + (row.assignee ? "var(--bdr)" : "#fcd34d"),
-        borderRadius: 6,
-        color: "var(--txt)",
-        padding: "5px 8px",
-        fontSize: 12,
-        outline: "none",
-        width: "100%"
       }
-    }, /*#__PURE__*/React.createElement("option", {
-      value: ""
-    }, "\uB2F4\uB2F9\uC790 \uC120\uD0DD"), assignees.map(function (a) {
-      return /*#__PURE__*/React.createElement("option", {
-        key: a.id,
-        value: a.id
-      }, a.name, a.affiliation ? " (".concat(a.affiliation, ")") : "");
-    })), /*#__PURE__*/React.createElement("select", {
-      value: row.status,
-      onChange: function onChange(e) {
-        return updateRow(row.id, "status", e.target.value);
-      },
-      style: _objectSpread({}, inp)
-    }, STATUSES.map(function (s) {
-      return /*#__PURE__*/React.createElement("option", {
-        key: s.value
-      }, s.value);
+    }, row.keyword), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 4,
+        flexWrap: "wrap",
+        justifyContent: "flex-end"
+      }
+    }, row.assigneeIds.length === 0 ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        color: "#92400e",
+        background: "#fef3c7",
+        padding: "1px 6px",
+        borderRadius: 999,
+        fontWeight: 600
+      }
+    }, "\uBBF8\uBC30\uC815") : row.assigneeIds.map(function (aid) {
+      var a = assignees.find(function (x) {
+        return x.id === aid;
+      });
+      return a ? /*#__PURE__*/React.createElement("span", {
+        key: aid,
+        style: {
+          fontSize: 10,
+          color: "var(--txt)",
+          background: "var(--hov)",
+          border: "1px solid var(--bdr)",
+          padding: "1px 6px",
+          borderRadius: 999,
+          fontWeight: 600
+        }
+      }, a.name) : null;
     })), /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return removeRow(row.id);
+      onClick: function onClick(e) {
+        e.stopPropagation();
+        removeRow(row.id);
       },
       style: {
         background: "none",
         border: "none",
         color: "#94a3b8",
         cursor: "pointer",
-        fontSize: 18,
+        fontSize: 15,
         lineHeight: 1,
         padding: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
+        flexShrink: 0
       }
     }, "\xD7"));
-  }), rows.length === 0 && /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: 40,
-      textAlign: "center",
+      display: "flex",
+      flexDirection: "column",
+      overflow: "hidden"
+    }
+  }, activeRow ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 16px",
+      borderBottom: "1px solid var(--bdr)",
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      marginBottom: 2
+    }
+  }, activeRow.keyword), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
       color: "var(--mut)"
     }
-  }, "\uD0A4\uC6CC\uB4DC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")), /*#__PURE__*/React.createElement("div", {
+  }, activeRow.assigneeIds.length, "\uBA85 \uBC30\uC815\uB428"), activeRow.assigneeIds.length > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return clearAssignees(activeRow.id);
+    },
+    style: {
+      fontSize: 10,
+      color: "#dc2626",
+      background: "none",
+      border: "none",
+      cursor: "pointer",
+      padding: 0
+    }
+  }, "\uC804\uCCB4 \uD574\uC81C"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: "auto",
+      padding: "12px 16px",
+      display: "flex",
+      flexDirection: "column",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--mut)",
+      marginBottom: 4
+    }
+  }, "\uB2F4\uB2F9\uC790\uB97C \uC120\uD0DD\uD558\uC138\uC694 (\uC911\uBCF5 \uAC00\uB2A5)"), assignees.map(function (a) {
+    var checked = activeRow.assigneeIds.includes(a.id);
+    return /*#__PURE__*/React.createElement("div", {
+      key: a.id,
+      onClick: function onClick() {
+        return toggleAssignee(activeRow.id, a.id);
+      },
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 12px",
+        borderRadius: 8,
+        border: "1px solid " + (checked ? "#3b82f6" : "var(--bdr)"),
+        background: checked ? "#eff6ff" : "var(--surf)",
+        cursor: "pointer",
+        transition: "all 0.1s"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 20,
+        height: 20,
+        borderRadius: 4,
+        border: "2px solid " + (checked ? "#3b82f6" : "var(--bdr)"),
+        background: checked ? "#3b82f6" : "transparent",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        transition: "all 0.1s"
+      }
+    }, checked && /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#fff",
+        fontSize: 12,
+        lineHeight: 1
+      }
+    }, "\u2713")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 600,
+        fontSize: 13,
+        color: checked ? "#1d4ed8" : "var(--txt)"
+      }
+    }, a.name), a.affiliation && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: "var(--mut)"
+      }
+    }, a.affiliation)));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 16px",
+      borderTop: "1px solid var(--bdr)",
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "var(--mut)"
+    }
+  }, "\uC0C1\uD0DC"), /*#__PURE__*/React.createElement("select", {
+    value: activeRow.status,
+    onChange: function onChange(e) {
+      return setRows(function (r) {
+        return r.map(function (row) {
+          return row.id === activeRow.id ? _objectSpread(_objectSpread({}, row), {}, {
+            status: e.target.value
+          }) : row;
+        });
+      });
+    },
+    style: _objectSpread(_objectSpread({}, inp), {}, {
+      marginTop: 4
+    })
+  }, STATUSES.map(function (s) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: s.value
+    }, s.value);
+  })))) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "var(--mut)",
+      padding: 24,
+      textAlign: "center",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 24
+    }
+  }, "\uD83D\uDC46"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 600
+    }
+  }, "\uD0A4\uC6CC\uB4DC\uB97C \uD074\uB9AD\uD558\uBA74"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12
+    }
+  }, "\uB2F4\uB2F9\uC790\uB97C \uBC30\uC815\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      marginTop: 4
+    }
+  }, "\uC911\uBCF5 \uBC30\uC815\uB3C4 \uAC00\uB2A5\uD569\uB2C8\uB2E4")))), step === 2 && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "14px 24px",
       borderTop: "1px solid var(--bdr)",
@@ -998,7 +1199,7 @@ function BulkAddModal(_ref6) {
       fontSize: 12,
       color: "var(--mut)"
     }
-  }, province && /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCCD ", province, city ? " · " + city : "", " \xB7 "), "\uCD1D ", /*#__PURE__*/React.createElement("strong", null, rows.length), "\uAC1C \uC800\uC7A5"), /*#__PURE__*/React.createElement("div", {
+  }, province && /*#__PURE__*/React.createElement("span", null, "\uD83D\uDCCD ", province, city ? " · " + city : "", " \xB7 "), "\uCD1D ", /*#__PURE__*/React.createElement("strong", null, rows.length), "\uAC1C \uD0A4\uC6CC\uB4DC"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 10
@@ -1028,7 +1229,7 @@ function BulkAddModal(_ref6) {
       fontWeight: 700,
       fontSize: 13
     }
-  }, rows.length, "\uAC1C \uC800\uC7A5"))))));
+  }, rows.length, "\uAC1C \uC800\uC7A5")))));
 }
 
 /* ── 담당자 관리 ── */
@@ -1351,9 +1552,15 @@ function RegionManager(_ref8) {
     _useState24 = _slicedToArray(_useState23, 2),
     showBulk = _useState24[0],
     setShowBulk = _useState24[1];
+  var _useState25 = useState(null),
+    _useState26 = _slicedToArray(_useState25, 2),
+    openDropdown = _useState26[0],
+    setOpenDropdown = _useState26[1]; // kwId or null
+
   useEffect(function () {
     setSelCity("");
     setShowBulk(false);
+    setOpenDropdown(null);
   }, [selProv]);
   var inp = {
     background: "var(--inp)",
@@ -1396,12 +1603,35 @@ function RegionManager(_ref8) {
       return [].concat(_toConsumableArray(p), _toConsumableArray(newKws));
     });
   }
+  function setKwAssignee(kwId, assId) {
+    setData(function (p) {
+      return p.map(function (d) {
+        return d.id === kwId ? _objectSpread(_objectSpread({}, d), {}, {
+          assignee: assId,
+          updatedAt: new Date().toISOString().slice(0, 10)
+        }) : d;
+      });
+    });
+    setOpenDropdown(null);
+  }
+  function cycleStatus(kwId, currentStatus) {
+    var idx = STATUSES.findIndex(function (s) {
+      return s.value === currentStatus;
+    });
+    var next = STATUSES[(idx + 1) % STATUSES.length].value;
+    setData(function (p) {
+      return p.map(function (d) {
+        return d.id === kwId ? _objectSpread(_objectSpread({}, d), {}, {
+          status: next,
+          updatedAt: new Date().toISOString().slice(0, 10)
+        }) : d;
+      });
+    });
+  }
   var STAT_COLORS = {
     미작성: "#6b7280",
-    작성중: "#2563eb",
-    검수중: "#d97706",
-    완료: "#16a34a",
-    보류: "#dc2626"
+    작성완료: "#16a34a",
+    대기: "#d97706"
   };
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1628,14 +1858,18 @@ function RegionManager(_ref8) {
     }
   }, "+ \uD0A4\uC6CC\uB4DC \uCD94\uAC00")), areaKws.length > 0 ? /*#__PURE__*/React.createElement("div", {
     style: {
-      maxHeight: 400,
+      maxHeight: 480,
       overflowY: "auto"
+    },
+    onClick: function onClick() {
+      return setOpenDropdown(null);
     }
   }, areaKws.map(function (kw, i) {
     var sc = STAT_COLORS[kw.status] || "#6b7280";
     var ass = assignees.find(function (a) {
       return a.id === kw.assignee;
     });
+    var isOpen = openDropdown === kw.id;
     return /*#__PURE__*/React.createElement("div", {
       key: kw.id,
       style: {
@@ -1644,7 +1878,8 @@ function RegionManager(_ref8) {
         gap: 10,
         padding: "10px 16px",
         borderBottom: i < areaKws.length - 1 ? "1px solid var(--bdr)" : "none",
-        fontSize: 12
+        fontSize: 12,
+        position: "relative"
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -1658,21 +1893,131 @@ function RegionManager(_ref8) {
         textOverflow: "ellipsis",
         whiteSpace: "nowrap"
       }
-    }, kw.mainKeyword)), ass && /*#__PURE__*/React.createElement("span", {
+    }, kw.mainKeyword)), /*#__PURE__*/React.createElement("div", {
       style: {
-        fontSize: 11,
-        color: "var(--mut)",
-        whiteSpace: "nowrap"
+        position: "relative"
+      },
+      onClick: function onClick(e) {
+        return e.stopPropagation();
       }
-    }, ass.name), /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setOpenDropdown(isOpen ? null : kw.id);
+      },
+      style: {
+        padding: "3px 10px",
+        borderRadius: 6,
+        border: "1px solid var(--bdr)",
+        background: ass ? "var(--hov)" : "#fef3c7",
+        color: ass ? "var(--txt)" : "#92400e",
+        fontSize: 11,
+        fontWeight: 600,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        display: "flex",
+        alignItems: "center",
+        gap: 4
+      }
+    }, ass ? ass.name : /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#92400e"
+      }
+    }, "\uB2F4\uB2F9\uC790 \u25BE"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 9,
+        color: "var(--mut)"
+      }
+    }, "\u25BE")), isOpen && /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: "absolute",
+        right: 0,
+        top: "calc(100% + 4px)",
+        background: "var(--surf)",
+        border: "1px solid var(--bdr)",
+        borderRadius: 10,
+        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+        zIndex: 50,
+        minWidth: 160,
+        overflow: "hidden"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "6px 12px",
+        fontSize: 10,
+        fontWeight: 700,
+        color: "var(--mut)",
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        borderBottom: "1px solid var(--bdr)"
+      }
+    }, "\uB2F4\uB2F9\uC790 \uC120\uD0DD"), assignees.map(function (a) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: a.id,
+        onClick: function onClick() {
+          return setKwAssignee(kw.id, a.id);
+        },
+        style: {
+          padding: "9px 14px",
+          cursor: "pointer",
+          fontSize: 12,
+          fontWeight: kw.assignee === a.id ? 700 : 400,
+          color: kw.assignee === a.id ? "#2563eb" : "var(--txt)",
+          background: kw.assignee === a.id ? "#eff6ff" : "transparent",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8
+        },
+        onMouseEnter: function onMouseEnter(e) {
+          return e.currentTarget.style.background = kw.assignee === a.id ? "#eff6ff" : "var(--hov)";
+        },
+        onMouseLeave: function onMouseLeave(e) {
+          return e.currentTarget.style.background = kw.assignee === a.id ? "#eff6ff" : "transparent";
+        }
+      }, /*#__PURE__*/React.createElement("span", null, a.name), a.affiliation && /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 10,
+          color: "var(--mut)"
+        }
+      }, a.affiliation), kw.assignee === a.id && /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 11,
+          color: "#2563eb"
+        }
+      }, "\u2713"));
+    }), kw.assignee && /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        return setKwAssignee(kw.id, "");
+      },
+      style: {
+        padding: "8px 14px",
+        cursor: "pointer",
+        fontSize: 11,
+        color: "#dc2626",
+        borderTop: "1px solid var(--bdr)",
+        fontWeight: 600
+      },
+      onMouseEnter: function onMouseEnter(e) {
+        return e.currentTarget.style.background = "#fee2e2";
+      },
+      onMouseLeave: function onMouseLeave(e) {
+        return e.currentTarget.style.background = "transparent";
+      }
+    }, "\uBC30\uC815 \uD574\uC81C"))), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return cycleStatus(kw.id, kw.status);
+      },
+      title: "\uD074\uB9AD\uD558\uBA74 \uC0C1\uD0DC\uAC00 \uBCC0\uACBD\uB429\uB2C8\uB2E4",
       style: {
         fontSize: 10,
-        padding: "2px 7px",
+        padding: "3px 8px",
         borderRadius: 999,
         background: sc + "22",
         color: sc,
         fontWeight: 700,
-        whiteSpace: "nowrap"
+        whiteSpace: "nowrap",
+        border: "none",
+        cursor: "pointer"
       }
     }, kw.status));
   })) : /*#__PURE__*/React.createElement("div", {
@@ -1709,18 +2054,18 @@ function DbView(_ref9) {
     region: "",
     assignee: ""
   };
-  var _useState25 = useState(_objectSpread({}, BLANK_DB)),
-    _useState26 = _slicedToArray(_useState25, 2),
-    form = _useState26[0],
-    setForm = _useState26[1];
-  var _useState27 = useState(""),
+  var _useState27 = useState(_objectSpread({}, BLANK_DB)),
     _useState28 = _slicedToArray(_useState27, 2),
-    search = _useState28[0],
-    setSearch = _useState28[1];
+    form = _useState28[0],
+    setForm = _useState28[1];
   var _useState29 = useState(""),
     _useState30 = _slicedToArray(_useState29, 2),
-    selAss = _useState30[0],
-    setSelAss = _useState30[1];
+    search = _useState30[0],
+    setSearch = _useState30[1];
+  var _useState31 = useState(""),
+    _useState32 = _slicedToArray(_useState31, 2),
+    selAss = _useState32[0],
+    setSelAss = _useState32[1];
   var inp = {
     background: "var(--inp)",
     border: "1px solid var(--bdr)",
@@ -2144,19 +2489,19 @@ function DbView(_ref9) {
 var VIEWS = ["키워드 관리", "담당자 성과", "지역 비교", "DB 생산", "설정"];
 function App() {
   var _regionData$editForm$, _regionData$editForm$2, _regionData$fProv, _regionData$fProv2;
-  var _useState31 = useState(false),
-    _useState32 = _slicedToArray(_useState31, 2),
-    dark = _useState32[0],
-    setDark = _useState32[1];
-  var _useState33 = useState("키워드 관리"),
+  var _useState33 = useState(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    view = _useState34[0],
-    setView = _useState34[1];
-  var _useState35 = useState("assignee"),
+    dark = _useState34[0],
+    setDark = _useState34[1];
+  var _useState35 = useState("키워드 관리"),
     _useState36 = _slicedToArray(_useState35, 2),
-    settingsTab = _useState36[0],
-    setSettingsTab = _useState36[1];
-  var _useState37 = useState(function () {
+    view = _useState36[0],
+    setView = _useState36[1];
+  var _useState37 = useState("assignee"),
+    _useState38 = _slicedToArray(_useState37, 2),
+    settingsTab = _useState38[0],
+    setSettingsTab = _useState38[1];
+  var _useState39 = useState(function () {
       try {
         var s = localStorage.getItem("keyops_data");
         return s ? JSON.parse(s) : SAMPLE;
@@ -2164,10 +2509,10 @@ function App() {
         return SAMPLE;
       }
     }),
-    _useState38 = _slicedToArray(_useState37, 2),
-    data = _useState38[0],
-    setData = _useState38[1];
-  var _useState39 = useState(function () {
+    _useState40 = _slicedToArray(_useState39, 2),
+    data = _useState40[0],
+    setData = _useState40[1];
+  var _useState41 = useState(function () {
       try {
         var s = localStorage.getItem("keyops_assignees2");
         return s ? JSON.parse(s) : DEFAULT_ASSIGNEES;
@@ -2175,10 +2520,10 @@ function App() {
         return DEFAULT_ASSIGNEES;
       }
     }),
-    _useState40 = _slicedToArray(_useState39, 2),
-    assignees = _useState40[0],
-    setAssignees = _useState40[1];
-  var _useState41 = useState(function () {
+    _useState42 = _slicedToArray(_useState41, 2),
+    assignees = _useState42[0],
+    setAssignees = _useState42[1];
+  var _useState43 = useState(function () {
       try {
         var s = localStorage.getItem("keyops_regions");
         return s ? JSON.parse(s) : REGION_DATA;
@@ -2186,10 +2531,10 @@ function App() {
         return REGION_DATA;
       }
     }),
-    _useState42 = _slicedToArray(_useState41, 2),
-    regionData = _useState42[0],
-    setRegionData = _useState42[1];
-  var _useState43 = useState(function () {
+    _useState44 = _slicedToArray(_useState43, 2),
+    regionData = _useState44[0],
+    setRegionData = _useState44[1];
+  var _useState45 = useState(function () {
       try {
         var s = localStorage.getItem("keyops_db");
         return s ? JSON.parse(s) : [];
@@ -2197,57 +2542,57 @@ function App() {
         return [];
       }
     }),
-    _useState44 = _slicedToArray(_useState43, 2),
-    dbRecords = _useState44[0],
-    setDbRecords = _useState44[1];
-  var _useState45 = useState([]),
     _useState46 = _slicedToArray(_useState45, 2),
-    sel = _useState46[0],
-    setSel = _useState46[1];
-  var _useState47 = useState(""),
+    dbRecords = _useState46[0],
+    setDbRecords = _useState46[1];
+  var _useState47 = useState([]),
     _useState48 = _slicedToArray(_useState47, 2),
-    search = _useState48[0],
-    setSearch = _useState48[1];
+    sel = _useState48[0],
+    setSel = _useState48[1];
   var _useState49 = useState(""),
     _useState50 = _slicedToArray(_useState49, 2),
-    fProv = _useState50[0],
-    setFProv = _useState50[1];
+    search = _useState50[0],
+    setSearch = _useState50[1];
   var _useState51 = useState(""),
     _useState52 = _slicedToArray(_useState51, 2),
-    fCity = _useState52[0],
-    setFCity = _useState52[1];
+    fProv = _useState52[0],
+    setFProv = _useState52[1];
   var _useState53 = useState(""),
     _useState54 = _slicedToArray(_useState53, 2),
-    fAss = _useState54[0],
-    setFAss = _useState54[1];
+    fCity = _useState54[0],
+    setFCity = _useState54[1];
   var _useState55 = useState(""),
     _useState56 = _slicedToArray(_useState55, 2),
-    fStat = _useState56[0],
-    setFStat = _useState56[1];
+    fAss = _useState56[0],
+    setFAss = _useState56[1];
   var _useState57 = useState(""),
     _useState58 = _slicedToArray(_useState57, 2),
-    fExp = _useState58[0],
-    setFExp = _useState58[1];
-  var _useState59 = useState(null),
+    fStat = _useState58[0],
+    setFStat = _useState58[1];
+  var _useState59 = useState(""),
     _useState60 = _slicedToArray(_useState59, 2),
-    editId = _useState60[0],
-    setEditId = _useState60[1];
-  var _useState61 = useState({}),
+    fExp = _useState60[0],
+    setFExp = _useState60[1];
+  var _useState61 = useState(null),
     _useState62 = _slicedToArray(_useState61, 2),
-    editForm = _useState62[0],
-    setEditForm = _useState62[1];
-  var _useState63 = useState(false),
+    editId = _useState62[0],
+    setEditId = _useState62[1];
+  var _useState63 = useState({}),
     _useState64 = _slicedToArray(_useState63, 2),
-    bulkModal = _useState64[0],
-    setBulkModal = _useState64[1];
-  var _useState65 = useState("mainKeyword"),
+    editForm = _useState64[0],
+    setEditForm = _useState64[1];
+  var _useState65 = useState(false),
     _useState66 = _slicedToArray(_useState65, 2),
-    sortCol = _useState66[0],
-    setSortCol = _useState66[1];
-  var _useState67 = useState("asc"),
+    bulkModal = _useState66[0],
+    setBulkModal = _useState66[1];
+  var _useState67 = useState("updatedAt"),
     _useState68 = _slicedToArray(_useState67, 2),
-    sortDir = _useState68[0],
-    setSortDir = _useState68[1];
+    sortCol = _useState68[0],
+    setSortCol = _useState68[1];
+  var _useState69 = useState("desc"),
+    _useState70 = _slicedToArray(_useState69, 2),
+    sortDir = _useState70[0],
+    setSortDir = _useState70[1];
   var fileRef = useRef();
   useEffect(function () {
     try {
@@ -2272,6 +2617,9 @@ function App() {
   useEffect(function () {
     setFCity("");
   }, [fProv]);
+  useEffect(function () {
+    setPage(1);
+  }, [search, fProv, fCity, fAss, fStat, sortCol, sortDir]);
   var C = dark ? {
     "--bg": "#0f172a",
     "--surf": "#1e293b",
@@ -2293,11 +2641,18 @@ function App() {
     var d = new Date();
     return "".concat(d.getFullYear(), "\uB144 ").concat(d.getMonth() + 1, "\uC6D4 ").concat(d.getDate(), "\uC77C");
   }, []);
+  var _useState71 = useState(1),
+    _useState72 = _slicedToArray(_useState71, 2),
+    page = _useState72[0],
+    setPage = _useState72[1];
+  var PAGE_SIZE = 20;
   var filtered = useMemo(function () {
-    var r = _toConsumableArray(data);
+    var r = _toConsumableArray(data).filter(function (x) {
+      return x.assignee && x.assignee !== "";
+    }); // 담당자 배정된 것만
     if (search) r = r.filter(function (x) {
-      var _x$articleUrl, _assignees$find;
-      return x.mainKeyword.includes(search) || ((_x$articleUrl = x.articleUrl) === null || _x$articleUrl === void 0 ? void 0 : _x$articleUrl.includes(search)) || ((_assignees$find = assignees.find(function (a) {
+      var _x$subKeyword, _x$articleUrl, _assignees$find;
+      return x.mainKeyword.includes(search) || ((_x$subKeyword = x.subKeyword) === null || _x$subKeyword === void 0 ? void 0 : _x$subKeyword.includes(search)) || ((_x$articleUrl = x.articleUrl) === null || _x$articleUrl === void 0 ? void 0 : _x$articleUrl.includes(search)) || ((_assignees$find = assignees.find(function (a) {
         return a.id === x.assignee;
       })) === null || _assignees$find === void 0 ? void 0 : _assignees$find.name.includes(search));
     });
@@ -2313,18 +2668,22 @@ function App() {
     if (fStat) r = r.filter(function (x) {
       return x.status === fStat;
     });
-    if (fExp) r = r.filter(function (x) {
-      return getExposureStatus(x.currentRank) === fExp;
-    });
-    r.sort(function (a, b) {
-      var _a$sortCol, _b$sortCol;
-      var av = (_a$sortCol = a[sortCol]) !== null && _a$sortCol !== void 0 ? _a$sortCol : "",
-        bv = (_b$sortCol = b[sortCol]) !== null && _b$sortCol !== void 0 ? _b$sortCol : "";
-      if (typeof av === "number") return sortDir === "asc" ? av - bv : bv - av;
-      return sortDir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
-    });
+    // 수정일 역순 기본 정렬, 컬럼 클릭 시 해당 컬럼 정렬
+    if (sortCol === "updatedAt" || !sortCol) {
+      r.sort(function (a, b) {
+        return sortDir === "asc" ? String(a.updatedAt || "").localeCompare(String(b.updatedAt || "")) : String(b.updatedAt || "").localeCompare(String(a.updatedAt || ""));
+      });
+    } else {
+      r.sort(function (a, b) {
+        var _a$sortCol, _b$sortCol;
+        var av = (_a$sortCol = a[sortCol]) !== null && _a$sortCol !== void 0 ? _a$sortCol : "",
+          bv = (_b$sortCol = b[sortCol]) !== null && _b$sortCol !== void 0 ? _b$sortCol : "";
+        if (typeof av === "number") return sortDir === "asc" ? av - bv : bv - av;
+        return sortDir === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+      });
+    }
     return r;
-  }, [data, search, fProv, fCity, fAss, fStat, fExp, sortCol, sortDir, assignees]);
+  }, [data, search, fProv, fCity, fAss, fStat, sortCol, sortDir, assignees]);
   var stats = useMemo(function () {
     var byS = function byS(s) {
       return data.filter(function (d) {
@@ -2520,7 +2879,12 @@ function App() {
     reader.readAsText(file, "UTF-8");
     e.target.value = "";
   };
-  var selAll = sel.length === filtered.length && filtered.length > 0;
+  var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  var safePage = Math.min(page, totalPages);
+  var pagedRows = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  var selAll = pagedRows.length > 0 && pagedRows.every(function (r) {
+    return sel.includes(r.id);
+  });
   var inp = {
     background: "var(--inp)",
     border: "1px solid var(--bdr)",
@@ -2583,7 +2947,7 @@ function App() {
       letterSpacing: "-0.03em",
       whiteSpace: "nowrap"
     }
-  }, "\uD83D\uDC3E EVAWpet 마케팅"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83D\uDC3E EVAW pet \uB9C8\uCF00\uD305"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 3
@@ -3030,7 +3394,7 @@ function App() {
       color: "var(--mut)",
       marginBottom: 8
     }
-  }, filtered.length, "\uAC1C \uD0A4\uC6CC\uB4DC"), /*#__PURE__*/React.createElement("div", {
+  }, "\uCD1D ", filtered.length, "\uAC1C \uD0A4\uC6CC\uB4DC (\uB2F4\uB2F9\uC790 \uBC30\uC815) \xB7 ", safePage, "/", totalPages, " \uD398\uC774\uC9C0"), /*#__PURE__*/React.createElement("div", {
     style: {
       background: "var(--surf)",
       border: "1px solid var(--bdr)",
@@ -3055,9 +3419,17 @@ function App() {
     type: "checkbox",
     checked: selAll,
     onChange: function onChange(e) {
-      return setSel(e.target.checked ? filtered.map(function (r) {
-        return r.id;
-      }) : []);
+      return setSel(function (s) {
+        return e.target.checked ? [].concat(_toConsumableArray(s), _toConsumableArray(pagedRows.map(function (r) {
+          return r.id;
+        }).filter(function (id) {
+          return !s.includes(id);
+        }))) : s.filter(function (id) {
+          return !pagedRows.map(function (r) {
+            return r.id;
+          }).includes(id);
+        });
+      });
     }
   })), [["지역", "province"], ["메인키워드", "mainKeyword"], ["담당자", "assignee"], ["상태", "status"], ["게시글 URL", "articleUrl"], ["수정일", "updatedAt"], ["액션", null]].map(function (_ref10) {
     var _ref11 = _slicedToArray(_ref10, 2),
@@ -3070,7 +3442,7 @@ function App() {
         return c && hs(c);
       }
     }, lb, c && sortCol === c ? sortDir === "asc" ? " ▲" : " ▼" : "");
-  }))), /*#__PURE__*/React.createElement("tbody", null, filtered.map(function (row, i) {
+  }))), /*#__PURE__*/React.createElement("tbody", null, pagedRows.map(function (row, i) {
     var isEdit = editId === row.id;
     var s = STATUSES.find(function (x) {
       return x.value === row.status;
@@ -3085,7 +3457,7 @@ function App() {
       style: td
     }), /*#__PURE__*/React.createElement("td", {
       style: _objectSpread(_objectSpread({}, td), {}, {
-        minWidth: 200
+        minWidth: 160
       })
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -3132,34 +3504,14 @@ function App() {
         key: c,
         value: c
       }, c);
-    })), /*#__PURE__*/React.createElement("input", {
-      value: editForm.district || "",
-      onChange: function onChange(e) {
-        return setEditForm(function (f) {
-          return _objectSpread(_objectSpread({}, f), {}, {
-            district: e.target.value
-          });
-        });
-      },
-      style: _objectSpread(_objectSpread({}, inp), {}, {
-        fontSize: 11
-      }),
-      placeholder: "\uAD6C"
-    }), /*#__PURE__*/React.createElement("input", {
-      value: editForm.dong || "",
-      onChange: function onChange(e) {
-        return setEditForm(function (f) {
-          return _objectSpread(_objectSpread({}, f), {}, {
-            dong: e.target.value
-          });
-        });
-      },
-      style: _objectSpread(_objectSpread({}, inp), {}, {
-        fontSize: 11
-      }),
-      placeholder: "\uB3D9"
-    }))), /*#__PURE__*/React.createElement("td", {
+    })))), /*#__PURE__*/React.createElement("td", {
       style: td
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: 4
+      }
     }, /*#__PURE__*/React.createElement("input", {
       value: editForm.mainKeyword || "",
       onChange: function onChange(e) {
@@ -3169,8 +3521,25 @@ function App() {
           });
         });
       },
-      style: inp
-    })), /*#__PURE__*/React.createElement("td", {
+      style: _objectSpread(_objectSpread({}, inp), {}, {
+        fontWeight: 600
+      }),
+      placeholder: "\uBA54\uC778\uD0A4\uC6CC\uB4DC"
+    }), /*#__PURE__*/React.createElement("input", {
+      value: editForm.subKeyword || "",
+      onChange: function onChange(e) {
+        return setEditForm(function (f) {
+          return _objectSpread(_objectSpread({}, f), {}, {
+            subKeyword: e.target.value
+          });
+        });
+      },
+      style: _objectSpread(_objectSpread({}, inp), {}, {
+        fontSize: 11,
+        color: "var(--mut)"
+      }),
+      placeholder: "\uC11C\uBE0C\uD0A4\uC6CC\uB4DC"
+    }))), /*#__PURE__*/React.createElement("td", {
       style: td
     }, /*#__PURE__*/React.createElement("select", {
       value: editForm.assignee || "",
@@ -3283,7 +3652,7 @@ function App() {
       }
     })), /*#__PURE__*/React.createElement("td", {
       style: _objectSpread(_objectSpread({}, td), {}, {
-        minWidth: 160
+        minWidth: 140
       })
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -3291,15 +3660,15 @@ function App() {
         fontSize: 12,
         color: "#3b82f6"
       }
-    }, row.province), (row.city || row.district || row.dong) && /*#__PURE__*/React.createElement("div", {
+    }, row.province), row.city && /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 11,
         color: "var(--mut)",
         marginTop: 2
       }
-    }, [row.city, row.district, row.dong].filter(Boolean).join(" · "))), /*#__PURE__*/React.createElement("td", {
+    }, row.city)), /*#__PURE__*/React.createElement("td", {
       style: _objectSpread(_objectSpread({}, td), {}, {
-        maxWidth: 160
+        maxWidth: 180
       })
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -3308,7 +3677,16 @@ function App() {
         textOverflow: "ellipsis",
         whiteSpace: "nowrap"
       }
-    }, row.mainKeyword)), /*#__PURE__*/React.createElement("td", {
+    }, row.mainKeyword), row.subKeyword && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "var(--mut)",
+        marginTop: 2,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+      }
+    }, "\u2514 ", row.subKeyword)), /*#__PURE__*/React.createElement("td", {
       style: td
     }, /*#__PURE__*/React.createElement(AssigneeBadge, {
       id: row.assignee,
@@ -3363,13 +3741,121 @@ function App() {
         cursor: "pointer"
       }
     }, "\u270F\uFE0F \uD3B8\uC9D1")));
-  }))), filtered.length === 0 && /*#__PURE__*/React.createElement("div", {
+  }))), pagedRows.length === 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
       padding: 40,
       color: "var(--mut)"
     }
-  }, "\uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")))), /*#__PURE__*/React.createElement(BulkAddModal, {
+  }, "\uB2F4\uB2F9\uC790\uAC00 \uBC30\uC815\uB41C \uD0A4\uC6CC\uB4DC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.")), totalPages > 1 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 6,
+      marginTop: 16
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPage(1);
+    },
+    disabled: safePage === 1,
+    style: {
+      padding: "5px 10px",
+      borderRadius: 7,
+      border: "1px solid var(--bdr)",
+      background: "var(--surf)",
+      color: safePage === 1 ? "var(--mut)" : "var(--txt)",
+      cursor: safePage === 1 ? "default" : "pointer",
+      fontSize: 12
+    }
+  }, "\xAB"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPage(function (p) {
+        return Math.max(1, p - 1);
+      });
+    },
+    disabled: safePage === 1,
+    style: {
+      padding: "5px 12px",
+      borderRadius: 7,
+      border: "1px solid var(--bdr)",
+      background: "var(--surf)",
+      color: safePage === 1 ? "var(--mut)" : "var(--txt)",
+      cursor: safePage === 1 ? "default" : "pointer",
+      fontSize: 12
+    }
+  }, "\u2039"), Array.from({
+    length: totalPages
+  }, function (_, i) {
+    return i + 1;
+  }).filter(function (p) {
+    return p === 1 || p === totalPages || Math.abs(p - safePage) <= 2;
+  }).reduce(function (acc, p, idx, arr) {
+    if (idx > 0 && p - arr[idx - 1] > 1) acc.push("...");
+    acc.push(p);
+    return acc;
+  }, []).map(function (p, i) {
+    return p === "..." ? /*#__PURE__*/React.createElement("span", {
+      key: "e" + i,
+      style: {
+        padding: "5px 8px",
+        color: "var(--mut)",
+        fontSize: 12
+      }
+    }, "\u2026") : /*#__PURE__*/React.createElement("button", {
+      key: p,
+      onClick: function onClick() {
+        return setPage(p);
+      },
+      style: {
+        padding: "5px 12px",
+        borderRadius: 7,
+        border: "1px solid " + (p === safePage ? "#3b82f6" : "var(--bdr)"),
+        background: p === safePage ? "#3b82f6" : "var(--surf)",
+        color: p === safePage ? "#fff" : "var(--txt)",
+        cursor: "pointer",
+        fontSize: 12,
+        fontWeight: p === safePage ? 700 : 400
+      }
+    }, p);
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPage(function (p) {
+        return Math.min(totalPages, p + 1);
+      });
+    },
+    disabled: safePage === totalPages,
+    style: {
+      padding: "5px 12px",
+      borderRadius: 7,
+      border: "1px solid var(--bdr)",
+      background: "var(--surf)",
+      color: safePage === totalPages ? "var(--mut)" : "var(--txt)",
+      cursor: safePage === totalPages ? "default" : "pointer",
+      fontSize: 12
+    }
+  }, "\u203A"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPage(totalPages);
+    },
+    disabled: safePage === totalPages,
+    style: {
+      padding: "5px 10px",
+      borderRadius: 7,
+      border: "1px solid var(--bdr)",
+      background: "var(--surf)",
+      color: safePage === totalPages ? "var(--mut)" : "var(--txt)",
+      cursor: safePage === totalPages ? "default" : "pointer",
+      fontSize: 12
+    }
+  }, "\xBB"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "var(--mut)",
+      marginLeft: 8
+    }
+  }, (safePage - 1) * PAGE_SIZE + 1, "\u2013", Math.min(safePage * PAGE_SIZE, filtered.length), " / ", filtered.length, "\uAC1C")))), /*#__PURE__*/React.createElement(BulkAddModal, {
     open: bulkModal,
     onClose: function onClose() {
       return setBulkModal(false);
